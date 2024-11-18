@@ -1,0 +1,62 @@
+.menu {
+  max-width: 500px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.menu1 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: turquoise;
+  width: 100px;
+  height: 50px;
+}
+
+.menu1:hover {
+  cursor: pointer;
+}
+
+.menu2 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: antiquewhite;
+  width: 100px;
+  height: 50px;
+}
+
+.menu2:hover {
+  cursor: pointer;
+}
+
+.menu3 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: rgb(180, 198, 247);
+  width: 100px;
+  height: 50px;
+}
+
+.menu3:hover {
+  cursor: pointer;
+}
+
+.menu4 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: lightpink;
+  width: 100px;
+  height: 50px;
+}
+
+.menu4:hover {
+  cursor: pointer;
+}

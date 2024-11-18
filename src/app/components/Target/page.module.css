@@ -1,0 +1,57 @@
+.targetForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.text {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.day {
+  margin-left: 10px;
+  color: red;
+}
+
+.target {
+  /* max-width: 400px; */
+  margin: 0 auto;
+  margin-top: 20px;
+  background-color: antiquewhite;
+}
+
+.period {
+  /* max-width: 400px; */
+  margin: 0 auto;
+  margin-top: 20px;
+  background-color: antiquewhite;
+}
+
+.pieGraph {
+  max-width: 400px;
+  margin: 0 auto;
+  /* background-color: rgb(232, 230, 230); */
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.achievement {
+  background-color: rgba(75, 192, 192, 0.6);
+  margin-right: 20px;
+}
+
+.remaining {
+  background-color: rgba(255, 99, 132, 0.6);
+  margin-right: 10px;
+}
+
+.pie {
+  width: 60%;
+  margin: 0 auto;
+  /* padding: 10px 20px; */
+}
