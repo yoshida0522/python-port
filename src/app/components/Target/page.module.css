@@ -15,23 +15,22 @@
 }
 
 .target {
-  /* max-width: 400px; */
   margin: 0 auto;
   margin-top: 20px;
-  background-color: antiquewhite;
+  border-radius: 10px;
+  background-color: rgb(235, 249, 142);
 }
 
 .period {
-  /* max-width: 400px; */
   margin: 0 auto;
   margin-top: 20px;
-  background-color: antiquewhite;
+  border-radius: 10px;
+  background-color: rgb(247, 200, 149);
 }
 
 .pieGraph {
   max-width: 400px;
   margin: 0 auto;
-  /* background-color: rgb(232, 230, 230); */
 }
 
 .content {
@@ -53,5 +52,4 @@
 .pie {
   width: 60%;
   margin: 0 auto;
-  /* padding: 10px 20px; */
 }

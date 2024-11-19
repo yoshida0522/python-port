@@ -1,0 +1,38 @@
+.title {
+  margin: 50px auto;
+}
+
+.userForm {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: center;
+  margin: 0 auto;
+  background-color: rgb(244, 243, 243);
+}
+
+.user {
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+.userInput {
+  width: 200px;
+}
+
+.nameLabel {
+  margin-right: 52px;
+}
+
+.idLabel {
+  margin-right: 114px;
+}
+
+.mailLabel {
+  margin-right: 20px;
+}
+
+.backButton {
+  margin: 30px auto;
+}
