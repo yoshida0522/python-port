@@ -4,15 +4,15 @@ import ProgressPieChart from "../PieChart/PieChart";
 import style from "./page.module.css";
 
 const Target = () => {
-  const progress = 60; // 現在の進捗
-  const total = 100; // 全体の目標
+  const progress = 10; // 現在の達成率
+  const total = 100;
 
   return (
     <>
       <div className={style.targetForm}>
         <div className={style.text}>
           <h3>目標達成まで残り</h3>
-          <h1 className={style.day}>21日!</h1>
+          <h1 className={style.day}>20日!</h1>
         </div>
         <div className={style.target}>
           <span>目標</span>
