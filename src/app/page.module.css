@@ -1,3 +1,32 @@
 .container {
   text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.graphContainer {
+  display: flex;
+  height: 300px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.prevButton,
+.nextButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.prevButton {
+  position: absolute;
+  left: 0;
+}
+
+.nextButton {
+  position: absolute;
+  right: 0;
 }

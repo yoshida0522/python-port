@@ -27,29 +27,3 @@
   border-radius: 10px;
   background-color: rgb(247, 200, 149);
 }
-
-.pieGraph {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.content {
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-
-.achievement {
-  background-color: rgba(75, 192, 192, 0.6);
-  margin-right: 20px;
-}
-
-.remaining {
-  background-color: rgba(255, 99, 132, 0.6);
-  margin-right: 10px;
-}
-
-.pie {
-  width: 60%;
-  margin: 0 auto;
-}

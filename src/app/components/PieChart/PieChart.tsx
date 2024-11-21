@@ -1,40 +1,17 @@
 import React from "react";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
+import style from "./page.module.css";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
-  Plugin,
   ChartData,
   ChartOptions,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-const customTitlePlugin: Plugin = {
-  id: "customTitlePlugin",
-  beforeDraw(chart) {
-    const ctx = chart.ctx;
-    const { width, height, data } = chart;
-    const percentage = (data.datasets[0]?.data?.[0] as number) || 0;
-
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#000";
-    ctx.font = "20px Arial";
-    ctx.fillText("達成率", width / 2, height / 2 - 10);
-    ctx.font = "bold 30px Arial";
-    ctx.fillText(`${percentage.toFixed(2)}%`, width / 2, height / 2 + 15);
-  },
-};
-
-ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartDataLabels,
-  customTitlePlugin
-);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 type ProgressPieChartProps = {
   progress: number;
@@ -46,11 +23,12 @@ const ProgressPieChart: React.FC<ProgressPieChartProps> = ({
   total,
 }) => {
   const percentage = total > 0 ? Math.min((progress / total) * 100, 100) : 0;
+  const remainingPercentage = 100 - percentage;
 
-  const chartData: ChartData<"doughnut"> = {
+  const chartData: ChartData<"pie"> = {
     datasets: [
       {
-        data: [percentage, 100 - percentage],
+        data: [percentage, remainingPercentage],
         backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
         borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
         borderWidth: 1,
@@ -58,17 +36,32 @@ const ProgressPieChart: React.FC<ProgressPieChartProps> = ({
     ],
   };
 
-  const options: ChartOptions<"doughnut"> = {
+  const options: ChartOptions<"pie"> = {
     responsive: true,
-    cutout: "55%",
     plugins: {
       legend: { display: false },
       tooltip: { enabled: false },
-      datalabels: { display: false },
+      datalabels: {
+        display: true,
+        align: "center",
+        anchor: "center",
+        font: {
+          weight: "bold",
+          size: 18,
+        },
+        formatter: (value: number, context: { dataIndex: number }) => {
+          const label = context.dataIndex === 0 ? "達成率" : "残り"; // `context.dataIndex`で達成率と残りを区別
+          return `${label}\n ${Math.round(value)}%`;
+        },
+      },
     },
   };
 
-  return <Doughnut data={chartData} options={options} />;
+  return (
+    <div className={style.graphSize}>
+      <Pie data={chartData} options={options} />
+    </div>
+  );
 };
 
 export default ProgressPieChart;

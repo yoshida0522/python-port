@@ -1,0 +1,9 @@
+.pieGraph {
+  width: 250px;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  position: relative;
+  top: -55px;
+}
