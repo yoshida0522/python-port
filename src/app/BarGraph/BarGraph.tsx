@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
-import { barGraphData } from "../../sampleData/barGraphData";
+import { barGraphData } from "../../app/sampleData/barGraphData";
 import style from "./page.module.css";
 
 function BarGraph() {
@@ -15,14 +15,14 @@ function BarGraph() {
     const achievementChart = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: barGraphData.dates, // X軸: 日付
+        labels: barGraphData.dates,
         datasets: [
           {
-            label: "日別達成度", // 凡例のラベル
-            data: barGraphData.achievements, // 達成度データ
-            backgroundColor: "rgba(54, 162, 235, 0.6)", // 棒の色
-            borderColor: "rgba(54, 162, 235, 1)", // 棒の枠線の色
-            borderWidth: 1, // 枠線の幅
+            label: "日別達成度",
+            data: barGraphData.achievements,
+            backgroundColor: "rgba(54, 162, 235, 0.6)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
           },
         ],
       },
@@ -32,25 +32,25 @@ function BarGraph() {
           x: {
             title: {
               display: true,
-              text: "日付", // X軸のタイトル
+              text: "日付",
             },
           },
           y: {
-            beginAtZero: true, // Y軸を0から始める
-            max: 100, // 達成度の最大値を100%に固定
+            beginAtZero: true,
+            max: 100,
             title: {
               display: true,
-              text: "達成率 (%)", // Y軸のタイトル
+              text: "達成率 (%)",
             },
             ticks: {
-              callback: (value) => `${value}%`, // 単位を%に設定
+              callback: (value) => `${value}%`,
             },
           },
         },
         plugins: {
           legend: {
-            display: true, // 凡例を表示
-            position: "top", // 凡例の位置
+            display: true,
+            position: "top",
           },
           tooltip: {
             callbacks: {

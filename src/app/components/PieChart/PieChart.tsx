@@ -50,7 +50,7 @@ const ProgressPieChart: React.FC<ProgressPieChartProps> = ({
           size: 18,
         },
         formatter: (value: number, context: { dataIndex: number }) => {
-          const label = context.dataIndex === 0 ? "達成率" : "残り"; // `context.dataIndex`で達成率と残りを区別
+          const label = context.dataIndex === 0 ? "達成率" : "残り";
           return `${label}\n ${Math.round(value)}%`;
         },
       },

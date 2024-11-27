@@ -7,7 +7,7 @@ const Target = () => {
       <div className={style.targetForm}>
         <div className={style.text}>
           <h3>目標達成まで残り</h3>
-          <h1 className={style.day}>20日!</h1>
+          <h1 className={style.day}>10日!</h1>
         </div>
         <div className={style.target}>
           <span>目標</span>
