@@ -44,7 +44,7 @@ const Goals = () => {
 
   return (
     <div className={style.center}>
-      <h1>Difyの練習</h1>
+      <h1>ヒアリング</h1>
       <textarea
         onChange={(e) => {
           setQuestion(e.target.value);

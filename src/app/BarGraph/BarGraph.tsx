@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
-import { barGraphData } from "../../app/sampleData/barGraphData";
+import { barGraphData } from "../sampleData/barGraphData";
 import style from "./page.module.css";
 
 function BarGraph() {

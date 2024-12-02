@@ -1,7 +1,12 @@
 import React from "react";
 import style from "./page.module.css";
 
-const Target = () => {
+type TargetProps = {
+  goal: string;
+  daily: string;
+};
+
+const Target: React.FC<TargetProps> = ({ goal, daily }) => {
   return (
     <>
       <div className={style.targetForm}>
@@ -11,11 +16,11 @@ const Target = () => {
         </div>
         <div className={style.target}>
           <span>目標</span>
-          <h2>目標達成アプリを作る</h2>
+          <h2>{goal}</h2>
         </div>
         <div className={style.period}>
           <span>期間</span>
-          <h2>3週間</h2>
+          <h2>{daily}</h2>
         </div>
       </div>
     </>
