@@ -11,15 +11,15 @@ const Setting = () => {
     name: "",
     email: "",
     goal: "",
-    daily: "",
-    day_time: "",
-    process: "",
+    duration: "",
+    daily_time: "",
+    level: "",
+    approach: "",
   });
 
   useEffect(() => {
     const userId = "674d18bcc09c624f84d48a5f";
     userGoal(userId).then((data) => setUserData(data));
-    // .catch((error) => console.error(error));
   }, []);
 
   const handleBack = () => {
@@ -62,7 +62,7 @@ const Setting = () => {
           <span className={style.hearingDaily}>期間</span>
           <input
             className={style.hearingInput}
-            value={userData.daily}
+            value={userData.duration}
             readOnly
           />
         </div>
@@ -70,7 +70,15 @@ const Setting = () => {
           <span className={style.hearingTime}>1日に割ける時間</span>
           <input
             className={style.hearingInput}
-            value={userData.day_time}
+            value={userData.daily_time}
+            readOnly
+          />
+        </div>
+        <div>
+          <span className={style.hearingLevel}>目標達成レベル</span>
+          <input
+            className={style.hearingInput}
+            value={userData.level}
             readOnly
           />
         </div>
@@ -78,7 +86,7 @@ const Setting = () => {
           <span className={style.hearingProcedure}>進め方の希望</span>
           <input
             className={style.hearingInput}
-            value={userData.process}
+            value={userData.approach}
             readOnly
           />
         </div>

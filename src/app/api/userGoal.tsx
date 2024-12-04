@@ -1,5 +1,5 @@
 export const userGoal = async (userId: string) => {
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL; // NEXT_PUBLIC_ を付けた変数名
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   if (!BASE_URL) {
     throw new Error("API URL is not defined in environment variables");
   }

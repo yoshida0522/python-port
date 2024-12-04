@@ -14,13 +14,14 @@ export default function Home() {
     name: "",
     email: "",
     goal: "",
-    daily: "",
-    day_time: "",
-    process: "",
+    duration: "",
+    daily_time: "",
+    approach: "",
   });
 
   useEffect(() => {
-    const userId = "674d18bcc09c624f84d48a5f"; // MongoDB のユーザーIDを指定
+    // MongoDB のユーザーIDを指定(認証で取得したIDを使用)
+    const userId = "674d18bcc09c624f84d48a5f";
     userGoal(userId).then((data) => setUserData(data));
     // .catch((error) => console.error(error));
   }, []);
@@ -35,7 +36,7 @@ export default function Home() {
 
   return (
     <div className={style.container}>
-      <Target goal={userData.goal} daily={userData.daily} />
+      <Target goal={userData.goal} daily={userData.duration} />
       <div className={style.graphContainer}>
         <button className={style.prevButton} onClick={handlePrev}>
           ◀
