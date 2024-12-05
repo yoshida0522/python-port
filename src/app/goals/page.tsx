@@ -29,7 +29,7 @@ const Goals = () => {
       try {
         await saveToDatabase(dbData);
       } catch {
-        setApiError("エラーが発生しました。再試行してください。"); // 固定メッセージを表示
+        setApiError("エラーが発生しました。再試行してください。");
       } finally {
         setIsSaving(false);
       }

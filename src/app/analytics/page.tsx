@@ -1,51 +1,58 @@
 "use client";
-
-import React, { useState } from "react";
-import { sampleData, Task } from "../sampleData/sample";
-import style from "./page.module.css";
 import { useRouter } from "next/navigation";
+import style from "./page.module.css";
+import useTasks from "../utils/useTasks";
 
 const Tasks = () => {
   const router = useRouter();
-  const [tasks, setTasks] = useState<Task[]>(sampleData);
+  const userId = "674d18bcc09c624f84d48a5f";
+  const tasks = useTasks(userId);
 
-  const toggleComplete = (id: number) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
-      )
-    );
-  };
+  const today = new Date();
+  const todayString = today.toISOString().split("T")[0];
+
+  const filteredTasks = tasks.filter((task) => {
+    const taskDate = new Date(task.implementation_date)
+      .toISOString()
+      .split("T")[0];
+    return taskDate === todayString;
+  });
+
+  const sortedTasks = filteredTasks.sort((a, b) => {
+    const dateA = new Date(a.implementation_date);
+    const dateB = new Date(b.implementation_date);
+    return dateA.getTime() - dateB.getTime();
+  });
 
   const handleBack = () => {
     router.back();
   };
 
-  //   バックエンドの構築が出来たら削除
-  const firstTask = tasks[0];
-
   return (
     <div className={style.taskList}>
-      <h1>進捗報告</h1>
+      <h1>タスク一覧</h1>
       <div className={style.taskCardContainer}>
-        {firstTask && (
-          <div
-            key={firstTask.id}
-            onClick={() => toggleComplete(firstTask.id)}
-            className={`${style.taskCard} ${
-              firstTask.isCompleted ? style.completed : style.pending
-            }`}
-          >
-            <h3>{firstTask.title}</h3>
-            <p>{firstTask.description}</p>
-          </div>
+        {sortedTasks.length > 0 ? (
+          sortedTasks.map((task) => (
+            <div
+              key={task.task_id}
+              className={`${style.taskCard} ${
+                task.completed ? style.completed : style.pending
+              }`}
+            >
+              <h3>{task.title}</h3>
+              <p>{task.description}</p>
+              <p>{task.implementation_date}</p>
+            </div>
+          ))
+        ) : (
+          <p>該当するタスクがありません。</p>
         )}
       </div>
       <div>
         <button onClick={handleBack} className={style.back}>
           戻る
         </button>
-        <button>進捗報告</button>
       </div>
     </div>
   );

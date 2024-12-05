@@ -60,10 +60,16 @@ const useSendRequest = (): UseSendRequestReturn => {
         setConversationId(data.conversation_id);
       }
 
-      setHistory((prevHistory) => [
-        ...prevHistory,
-        { question, answer: data.answer },
-      ]);
+      setHistory((prevHistory) => {
+        const updatedHistory = [
+          ...prevHistory,
+          { question, answer: data.answer },
+        ];
+        const questions = updatedHistory.map((entry) => entry.question);
+        console.log("Questions in history:", questions);
+
+        return updatedHistory;
+      });
 
       setQuestion("");
     } catch (error) {
