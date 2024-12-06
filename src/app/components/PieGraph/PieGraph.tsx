@@ -4,7 +4,7 @@ import style from "./page.module.css";
 import ProgressPieChart from "../PieChart/PieChart";
 
 function PieGraph() {
-  const progress = 20; // 現在の達成率
+  const progress = 20;
   const total = 100;
 
   return (
