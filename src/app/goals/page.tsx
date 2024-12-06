@@ -27,7 +27,9 @@ const Goals = () => {
         approach,
       };
       try {
-        await saveToDatabase(dbData);
+        // await saveToDatabase(dbData);
+        const result = await saveToDatabase(dbData);
+        console.log("データベース保存結果:", result);
       } catch {
         setApiError("エラーが発生しました。再試行してください。");
       } finally {
