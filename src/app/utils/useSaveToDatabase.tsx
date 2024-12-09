@@ -102,14 +102,13 @@ const useSaveToDatabase = () => {
         }
 
         console.log("データが正常に更新されました");
-        return; // 終了
+        return;
       }
 
       console.log(
         "一致するuser_idは見つかりませんでした。新しいデータを追加します。"
       );
 
-      // 新しいデータを追加する処理
       const insertResponse = await fetch(
         `http://127.0.0.1:8000/goals/${user_Id}`,
         {
