@@ -1,8 +1,89 @@
 .center {
-  display: block;
   text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.textarea {
+  width: 80%;
+  height: 100px;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.button:hover {
+  background-color: #0056b3;
 }
 
 .back {
+  margin-top: 20px;
+}
+
+.history {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.message {
+  margin-bottom: 15px;
+}
+
+.userMessage,
+.botMessage {
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 80%;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.userMessage {
+  text-align: left;
+  background-color: #f0f8ff; /* ユーザーのメッセージ背景 */
+  border: 1px solid #cce4ff;
+}
+
+.botMessage {
+  text-align: left;
+  background-color: #e0ffe0; /* ボットのメッセージ背景 */
+  border: 1px solid #b2ffb2;
   margin-top: 10px;
+}
+
+.h2 {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.textarea:focus,
+.button:focus {
+  outline: none;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 会話部分だけスクロール */
+.scrollContainer {
+  max-height: 400px; /* スクロール可能な領域の高さ */
+  overflow-y: auto; /* 垂直方向にスクロールを有効にする */
+  margin-bottom: 20px;
 }

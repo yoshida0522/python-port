@@ -36,3 +36,43 @@
 .backButton {
   margin: 30px auto;
 }
+
+.hearing {
+  display: flex;
+  justify-content: center;
+}
+
+.hearingForm {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.hearingGoal {
+  margin-right: 10px;
+}
+
+.hearingDaily {
+  margin-right: 10px;
+}
+
+.hearingTime {
+  margin-right: 10px;
+}
+
+.hearingLevel {
+  margin-right: 10px;
+}
+
+.hearingProcedure {
+  margin-right: 10px;
+}
+
+.hearingInput {
+  width: 300px;
+  margin-right: 50px;
+}
