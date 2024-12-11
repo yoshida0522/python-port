@@ -3,7 +3,6 @@ import { HistoryEntry, UseSendRequestReturn } from "../types";
 
 const apiKey = process.env.NEXT_PUBLIC_DIFY_API_KEY;
 const endpointURL = "https://api.dify.ai/v1/chat-messages";
-
 const useSendRequest = (): UseSendRequestReturn => {
   const [question, setQuestion] = useState("");
   const [conversationId, setConversationId] = useState("");

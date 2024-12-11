@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Task } from "../types";
 
+
 const useTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -30,6 +31,7 @@ const useTasks = (userId: string) => {
         } else {
           setTasks(filteredTasks);
         }
+
       } catch (error) {
         console.error("タスクの取得中にエラーが発生しました", error);
       }
