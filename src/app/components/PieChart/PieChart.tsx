@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import style from "./page.module.css";
 import {
@@ -13,16 +13,40 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-type ProgressPieChartProps = {
-  progress: number;
-  total: number;
-};
+const ProgressPieChart = () => {
+  const userId = "674d18bcc09c624f84d48a5f";
+  const [progress, setProgress] = useState(0);
+  const [total, setTotal] = useState(0);
 
-const ProgressPieChart: React.FC<ProgressPieChartProps> = ({
-  progress,
-  total,
-}) => {
-  const percentage = total > 0 ? Math.min((progress / total) * 100, 100) : 0;
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/tasks/${userId}`, {
+          method: "GET",
+        });
+        const data = await response.json();
+
+        const tasks = Array.isArray(data) ? data : data.tasks || [];
+        const totalTasks = tasks.length;
+        const incompleteTasks = tasks.filter(
+          (task: { completed: boolean }) => !task.completed
+        ).length;
+        const completionPercentage =
+          totalTasks > 0
+            ? ((totalTasks - incompleteTasks) / totalTasks) * 100
+            : 0;
+
+        setTotal(totalTasks);
+        setProgress(completionPercentage);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [userId]);
+
+  const percentage = total > 0 ? Math.min(progress, 100) : 0;
   const remainingPercentage = 100 - percentage;
 
   const chartData: ChartData<"pie"> = {

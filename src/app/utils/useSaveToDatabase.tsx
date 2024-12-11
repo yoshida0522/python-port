@@ -1,42 +1,3 @@
-// const useSaveToDatabase = () => {
-//   const saveToDatabase = async (data: {
-//     goal: string;
-//     duration: string;
-//     daily_time: string;
-//     level: string;
-//     approach: string;
-//   }) => {
-//     try {
-//       const userId = "674d18bcc09c624f84d48a5f";
-//       const response = await fetch(
-//         `http://127.0.0.1:8000/goals/?user_id=${userId}`,
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify(data),
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error("Failed to save data to database");
-//       }
-
-//       const result = await response.json();
-//       //   console.log("Data saved:", result);
-//       return result;
-//     } catch (error) {
-//       //   console.error("Error saving data:", error);
-//       throw error;
-//     }
-//   };
-
-//   return { saveToDatabase };
-// };
-
-// export default useSaveToDatabase;
-
 const useSaveToDatabase = () => {
   const saveToDatabase = async (data: {
     goal: string;
@@ -54,7 +15,7 @@ const useSaveToDatabase = () => {
       // 送信するデータに user_id を追加
       const requestData = {
         ...data,
-        user_id: user_Id, // user_idをリクエストデータに追加
+        user_id: user_Id,
       };
 
       // まず、ユーザーIDで既存のデータがあるか確認する
@@ -120,7 +81,7 @@ const useSaveToDatabase = () => {
         }
       );
 
-      console.log("送信するデータ:", requestData); // 送信するデータを確認
+      console.log("送信するデータ:", requestData);
 
       if (!insertResponse.ok) {
         const errorDetails = await insertResponse.json();

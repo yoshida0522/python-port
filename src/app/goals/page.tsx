@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useSaveToDatabase from "../utils/useSaveToDatabase";
 import useSendRequest from "../utils/useSendRequest";
+import useCreateGoal from "../utils/useCreateGoal";
 import { useState } from "react";
 
 const Goals = () => {
@@ -10,7 +11,7 @@ const Goals = () => {
   const { saveToDatabase } = useSaveToDatabase();
   const { question, setQuestion, history, sendRequest, loading } =
     useSendRequest();
-  const [apiError, setApiError] = useState<string | null>(null);
+  const { executeWorkflow, workflowLoading, workflowError } = useCreateGoal();
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -27,11 +28,18 @@ const Goals = () => {
         approach,
       };
       try {
-        // await saveToDatabase(dbData);
         const result = await saveToDatabase(dbData);
         console.log("データベース保存結果:", result);
-      } catch {
-        setApiError("エラーが発生しました。再試行してください。");
+
+        const workflowResult = await executeWorkflow(dbData);
+        console.log("ワークフロー実行結果:", workflowResult);
+
+        if (!workflowResult) {
+          console.error("ワークフロー実行結果が null です");
+          return;
+        }
+      } catch (error) {
+        console.error("エラーが発生しました:", error);
       } finally {
         setIsSaving(false);
       }
@@ -59,7 +67,7 @@ const Goals = () => {
         <button onClick={sendRequest} disabled={loading}>
           送信
         </button>
-        <button onClick={handleSave} disabled={loading}>
+        <button onClick={handleSave} disabled={loading || workflowLoading}>
           保存
         </button>
 
@@ -68,9 +76,11 @@ const Goals = () => {
         <button onClick={handleBack}>戻る</button>
       </div>
       <h2>会話履歴</h2>
-      {loading && <p>生成中です...</p>}
-      {isSaving && <p>保存中です...</p>}
-      {/* {workflowLoading && <p>ワークフローを実行中...</p>} */}
+      {loading && <p className={style.loading}>生成中です...</p>}
+      {isSaving && <p className={style.loading}>保存中です...</p>}
+      {workflowLoading && (
+        <p className={style.loading}>ワークフローを実行中...</p>
+      )}
       <div className={style.scrollContainer}>
         <ul className={style.history}>
           {history.map((entry, index) => (
@@ -85,8 +95,7 @@ const Goals = () => {
           ))}
         </ul>
       </div>
-      {/* {error && <p className={style.error}>エラー: {error}</p>} */}
-      {apiError && <p className={style.error}>{apiError}</p>}
+      {workflowError && <p className={style.error}>エラー: {workflowError}</p>}
       <div></div>
     </div>
   );
