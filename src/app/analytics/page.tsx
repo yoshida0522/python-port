@@ -91,6 +91,7 @@ const Analytics = () => {
         <button onClick={handleBack} className={style.back}>
           戻る
         </button>
+        <button>進捗報告</button>
       </div>
     </div>
   );

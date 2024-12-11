@@ -46,6 +46,7 @@ const Goals = () => {
     } else {
       console.log("必要なデータが不足しています");
     }
+
   };
 
   const handleBack = () => {
@@ -57,6 +58,7 @@ const Goals = () => {
       <h1>ヒアリング</h1>
       <textarea
         value={question}
+
         onChange={(e) => {
           setQuestion(e.target.value);
         }}
@@ -68,6 +70,7 @@ const Goals = () => {
         <button onClick={handleSave} disabled={loading || workflowLoading}>
           保存
         </button>
+
       </div>
       <div className={style.back}>
         <button onClick={handleBack}>戻る</button>
