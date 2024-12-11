@@ -6,15 +6,7 @@ import BarGraph from "./barGraph/BarGraph";
 import Target from "./components/Target/Target";
 import style from "./page.module.css";
 import { userGoal } from "./api/userGoal";
-
-type UserData = {
-  name: string;
-  email: string;
-  goal: string;
-  duration: string;
-  daily_time: string;
-  approach: string;
-};
+import { UserData } from "./types";
 
 export default function Home() {
   const [currentGraph, setCurrentGraph] = useState(0);

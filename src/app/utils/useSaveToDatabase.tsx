@@ -54,7 +54,7 @@ const useSaveToDatabase = () => {
       // 送信するデータに user_id を追加
       const requestData = {
         ...data,
-        user_id: user_Id, // user_idをリクエストデータに追加
+        user_id: user_Id,
       };
 
       // まず、ユーザーIDで既存のデータがあるか確認する
@@ -120,7 +120,7 @@ const useSaveToDatabase = () => {
         }
       );
 
-      console.log("送信するデータ:", requestData); // 送信するデータを確認
+      console.log("送信するデータ:", requestData);
 
       if (!insertResponse.ok) {
         const errorDetails = await insertResponse.json();

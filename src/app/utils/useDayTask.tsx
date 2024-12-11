@@ -1,14 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-
-interface Task {
-  task_id: string;
-  title: string;
-  description: string;
-  implementation_date: string;
-  user_id: string;
-  completed: boolean;
-}
+import { Task } from "../types";
 
 const useDayTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -23,10 +15,17 @@ const useDayTasks = (userId: string) => {
           throw new Error(`Failed to fetch tasks, status: ${response.status}`);
         }
         const data: Task[] = await response.json();
+
+        if (!Array.isArray(data)) {
+          setTasks([]);
+          return;
+        }
+
         console.log("Fetched tasks:", data);
         setTasks(data);
       } catch (error) {
         console.error("タスクの取得中にエラーが発生しました", error);
+        setTasks([]);
       }
     };
 

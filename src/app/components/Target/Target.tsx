@@ -1,10 +1,6 @@
 import React from "react";
 import style from "./page.module.css";
-
-type TargetProps = {
-  goal: string;
-  daily: string;
-};
+import { TargetProps } from "@/app/types";
 
 const Target: React.FC<TargetProps> = ({ goal, daily }) => {
   return (

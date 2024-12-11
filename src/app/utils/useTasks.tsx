@@ -1,15 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Task {
-  task_id: string;
-  title: string;
-  description: string;
-  implementation_date: string;
-  user_id: string;
-  completed: boolean;
-}
+import { Task } from "../types";
 
 const useTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -22,10 +14,22 @@ const useTasks = (userId: string) => {
         );
         const data: Task[] = await response.json();
 
+        // dataが配列でない場合、空配列をセット
+        if (!Array.isArray(data)) {
+          setTasks([]);
+          return;
+        }
+
         const filteredTasks = data.filter(
           (task) => task.user_id === userId && !task.completed
         );
-        setTasks(filteredTasks);
+
+        // タスクがない場合は空配列をセット
+        if (filteredTasks.length === 0) {
+          setTasks([]);
+        } else {
+          setTasks(filteredTasks);
+        }
       } catch (error) {
         console.error("タスクの取得中にエラーが発生しました", error);
       }
