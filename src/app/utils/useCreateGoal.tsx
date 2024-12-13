@@ -75,6 +75,7 @@ const useCreateGoal = () => {
         error instanceof Error ? error.message : "未知のエラーが発生しました";
       console.error(errorMessage);
       setWorkflowError(errorMessage);
+
       return null;
     } finally {
       setWorkflowLoading(false);
@@ -121,6 +122,7 @@ const useCreateGoal = () => {
           }
 
           const title = entry.title;
+
 
           entry.tasks.forEach((task: string) => {
             tasks.push({
