@@ -2,6 +2,19 @@ import { useState } from "react";
 import { TaskObj, WorkflowInput } from "../types";
 import useSaveTask from "./useSaveTask";
 
+const formatToLocalDate = () => {
+  try {
+    const now = new Date();
+    console.log("生成された現在の日付:", now);
+    return now.toISOString().split("T")[0]; // ここでyyyy-mm-dd形式にする
+  } catch (error) {
+    console.warn("日付フォーマットエラー:", error);
+    const fallbackDate = new Date();
+    console.log("フォールバック日付:", fallbackDate);
+    return fallbackDate.toISOString().split("T")[0]; // フォールバックでも同様にyyyy-mm-dd形式にする
+  }
+};
+
 const useCreateGoal = () => {
   const [workflowLoading, setWorkflowLoading] = useState(false);
   const [workflowError, setWorkflowError] = useState<string | null>(null);
@@ -18,6 +31,16 @@ const useCreateGoal = () => {
         throw new Error("APIキーが設定されていません");
       }
 
+      // `today`の日付を生成
+      const todayDate = new Date().toISOString().split("T")[0]; // yyyy-mm-dd形式に変更
+      const updatedDbData = { ...dbData, today: todayDate };
+
+      // リクエストデータをログ出力
+      console.log("送信するデータ:", {
+        inputs: updatedDbData,
+        user: "user-id-or-identifier",
+      });
+
       const response = await fetch("https://api.dify.ai/v1/workflows/run", {
         method: "POST",
         headers: {
@@ -25,8 +48,8 @@ const useCreateGoal = () => {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          inputs: dbData,
-          user: "user-id-or-identifier",
+          inputs: updatedDbData, // 入力データ
+          user: "user-id-or-identifier", // ユーザーID
         }),
       });
 
@@ -39,58 +62,68 @@ const useCreateGoal = () => {
       }
 
       const result = await response.json();
-      console.log("ワークフロー実行結果:", result);
+      const answer = result?.data?.outputs?.answer;
+      if (!answer) throw new Error("outputsが不正です");
 
-      if (result?.data?.outputs?.answer) {
-        const answer = result.data.outputs.answer;
-        const tasks: TaskObj[] = parseAnswerToTasks(answer);
-        if (tasks.length === 0) {
-          throw new Error(
-            "解析されたタスクが空です。ワークフロー結果を確認してください。"
-          );
-        }
-        await saveTasks(tasks);
-        return answer;
-      } else {
-        console.error("outputsが存在しないか、構造が異なります", result);
-        return null;
-      }
-      // } catch (error) {
-      //   console.error("ワークフロー実行エラー:", error);
-      //   setWorkflowError(
-      //     error instanceof Error ? error.message : "未知のエラーが発生しました"
-      //   );
-    } catch {
+      const tasks = parseAnswerToTasks(answer);
+      if (tasks.length === 0) throw new Error("解析されたタスクが空です");
+
+      await saveTasks(tasks);
+      return answer;
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "未知のエラーが発生しました";
+      console.error(errorMessage);
+      setWorkflowError(errorMessage);
+
       return null;
     } finally {
       setWorkflowLoading(false);
     }
   };
 
+  // 日付フォーマットを実行する関数にformatToLocalDateを使う
   const parseAnswerToTasks = (answer: string): TaskObj[] => {
     const tasks: TaskObj[] = [];
     const userId = "674d18bcc09c624f84d48a5f";
 
     try {
-      // 先頭の不要なテキストをスキップしてJSON部分を抽出
-      const jsonStart = answer.indexOf("["); // JSON開始位置
-      const jsonEnd = answer.lastIndexOf("]") + 1; // JSON終了位置
+      const jsonStart = answer.indexOf("[");
+      const jsonEnd = answer.lastIndexOf("]") + 1;
 
       if (jsonStart === -1 || jsonEnd === -1) {
         throw new Error("JSON形式のデータが見つかりません");
       }
 
-      const jsonString = answer.substring(jsonStart, jsonEnd); // JSON部分を取り出す
-
-      // JSONを解析してtasksに変換
-      const answerJson = JSON.parse(jsonString); // JSON解析
+      const jsonString = answer.substring(jsonStart, jsonEnd);
+      const answerJson = JSON.parse(jsonString);
 
       answerJson.forEach(
-        (entry: { date: string; title: string; tasks: string[] }) => {
-          const implementationDate = entry.date;
+        (entry: { date: string | Date; title: string; tasks: string[] }) => {
+          let implementationDate: string;
+
+          // 日付バリデーション
+          if (
+            typeof entry.date === "string" &&
+            !isNaN(Date.parse(entry.date))
+          ) {
+            implementationDate = new Date(entry.date)
+              .toISOString()
+              .split("T")[0];
+          } else if (
+            entry.date instanceof Date &&
+            !isNaN(entry.date.getTime())
+          ) {
+            implementationDate = entry.date.toISOString().split("T")[0];
+          } else {
+            // 無効な日付の場合フォールバック
+            console.warn("無効な日付が検出されました:", entry.date);
+            implementationDate = formatToLocalDate().split("T")[0];
+          }
+
           const title = entry.title;
 
-          // 各タスクを追加
+
           entry.tasks.forEach((task: string) => {
             tasks.push({
               user_id: userId,

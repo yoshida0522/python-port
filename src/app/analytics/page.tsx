@@ -3,19 +3,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useDayTasks from "../utils/useDayTask";
+import useReport from "../utils/useReport";
 
 const Analytics = () => {
   const router = useRouter();
   const userId = "674d18bcc09c624f84d48a5f";
   const tasksFromHook = useDayTasks(userId);
   const [tasks, setTasks] = useState(tasksFromHook);
+  const { handleReportLogic } = useReport();
 
   useEffect(() => {
     setTasks(tasksFromHook);
     console.log("Tasks in state:", tasksFromHook);
   }, [tasksFromHook]);
-
-  console.log("Tasks:", tasks);
 
   const filteredTasks = tasks.filter(
     (task) =>
@@ -65,6 +65,10 @@ const Analytics = () => {
     }
   };
 
+  const handleReport = () => {
+    handleReportLogic(tasks);
+  };
+
   return (
     <div className={style.taskList}>
       <h1>タスク一覧</h1>
@@ -91,7 +95,7 @@ const Analytics = () => {
         <button onClick={handleBack} className={style.back}>
           戻る
         </button>
-        <button>進捗報告</button>
+        <button onClick={handleReport}>進捗報告</button>
       </div>
     </div>
   );

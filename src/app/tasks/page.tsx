@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useTasks from "../utils/useTasks";
+import daleteTask from "../utils/useTaskDelete";
 
 const Tasks = () => {
   const router = useRouter();
@@ -15,6 +16,11 @@ const Tasks = () => {
   });
 
   const handleBack = () => {
+    router.back();
+  };
+
+  const handleDelete = async () => {
+    await daleteTask(userId);
     router.back();
   };
 
@@ -37,6 +43,9 @@ const Tasks = () => {
       <div>
         <button onClick={handleBack} className={style.back}>
           戻る
+        </button>
+        <button onClick={handleDelete} className={style.delete}>
+          全件削除
         </button>
       </div>
     </div>

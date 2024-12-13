@@ -56,3 +56,8 @@ export interface TaskObj {
   description: string;
   completed: boolean;
 }
+
+export interface BarGraphData {
+  dates: string[];
+  achievements: number[];
+}
