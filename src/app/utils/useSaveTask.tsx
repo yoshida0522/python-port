@@ -24,11 +24,6 @@ const useSaveTask = () => {
       }
 
       console.log("タスクが正常に保存されました");
-      // } catch (error) {
-      //   console.error("タスク保存エラー:", error);
-      //   setSaveError(
-      //     error instanceof Error ? error.message : "未知のエラーが発生しました"
-      //   );
     } finally {
       setSaveLoading(false);
     }
