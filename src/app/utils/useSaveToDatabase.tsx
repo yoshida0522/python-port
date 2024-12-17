@@ -12,13 +12,11 @@ const useSaveToDatabase = () => {
       console.log("既存データを確認中: user_id =", user_Id);
       console.log("受け取ったデータ:", data);
 
-      // 送信するデータに user_id を追加
       const requestData = {
         ...data,
         user_id: user_Id,
       };
 
-      // まず、ユーザーIDで既存のデータがあるか確認する
       const checkResponse = await fetch(
         `http://127.0.0.1:8000/goals/${user_Id}`,
         {
@@ -36,7 +34,6 @@ const useSaveToDatabase = () => {
       const existingData = await checkResponse.json();
       console.log("取得した既存データ:", existingData);
 
-      // 既存データに同じuser_idがある場合
       if (
         existingData.some(
           (item: { user_id: string }) => item.user_id === user_Id
@@ -44,7 +41,6 @@ const useSaveToDatabase = () => {
       ) {
         console.log("一致するuser_idが見つかりました。データを更新します。");
 
-        // 既存のデータがある場合は上書きする
         const updateResponse = await fetch(
           `http://127.0.0.1:8000/goals/${user_Id}`,
           {

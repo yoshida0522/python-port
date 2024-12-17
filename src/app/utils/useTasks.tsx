@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Task } from "../types";
 
-
 const useTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
@@ -15,7 +14,6 @@ const useTasks = (userId: string) => {
         );
         const data: Task[] = await response.json();
 
-        // dataが配列でない場合、空配列をセット
         if (!Array.isArray(data)) {
           setTasks([]);
           return;
@@ -25,13 +23,11 @@ const useTasks = (userId: string) => {
           (task) => task.user_id === userId && !task.completed
         );
 
-        // タスクがない場合は空配列をセット
         if (filteredTasks.length === 0) {
           setTasks([]);
         } else {
           setTasks(filteredTasks);
         }
-
       } catch (error) {
         console.error("タスクの取得中にエラーが発生しました", error);
       }
