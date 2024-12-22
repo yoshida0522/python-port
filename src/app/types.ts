@@ -61,3 +61,13 @@ export interface BarGraphData {
   dates: string[];
   achievements: number[];
 }
+
+export interface GraphDataResponse {
+  task_date: string;
+  completion_rate: number;
+}
+
+export interface GraphData {
+  dates: string[];
+  achievements: number[];
+}

@@ -1,72 +1,97 @@
-import { useState } from "react";
-import { BarGraphData, Task } from "../types";
+"use client";
+import { useRouter } from "next/navigation";
+import { Task } from "../types";
 
-const useReport = () => {
-  const [barGraphData, setBarGraphData] = useState<BarGraphData>({
-    dates: [
-      "2024-11-16",
-      "2024-11-17",
-      "2024-11-18",
-      "2024-11-19",
-      "2024-11-20",
-    ],
-    achievements: [45, 25, 90, 60, 75],
-  });
+const useReport = (userId: string, filteredTasks: Task[]) => {
+  const router = useRouter();
 
-  const updateTaskInDatabase = async (task: Task) => {
+  const handleReportLogic = async () => {
+    const totalTasks = filteredTasks.length;
+    const completedTasks = filteredTasks.filter(
+      (task) => task.completed
+    ).length;
+    const incompleteTasks = filteredTasks.filter((task) => !task.completed);
+
+    const completionRate =
+      totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(0) : "0";
+
+    console.log("Total tasks for today:", totalTasks);
+    console.log("Completed tasks for today:", completedTasks);
+    console.log(`Completion rate for today: ${completionRate}`);
+
+    const implementationDate =
+      filteredTasks.length > 0 ? filteredTasks[0].implementation_date : null;
+
+    if (!implementationDate) {
+      console.error("No tasks available for today's date.");
+      return;
+    }
+
+    const reportData = {
+      user_id: userId,
+      task_date: implementationDate,
+      total_task: totalTasks,
+      completed_task: completedTasks,
+      completion_rate: Number(completionRate),
+      filteredTasks,
+    };
+
     try {
-      const response = await fetch(
-        `http://localhost:8000/tasks/${task.task_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(task),
-        }
-      );
+      const response = await fetch(`http://localhost:8000/graph/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reportData),
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to update task in the database");
+        const errorDetails = await response.json();
+        console.error("Error saving progress report:", errorDetails);
+        throw new Error(
+          `Failed to save progress report: ${
+            errorDetails.detail || "Unknown error"
+          }`
+        );
       }
+
+      console.log("Progress report saved successfully");
     } catch (error) {
-      console.error("Error updating task:", error);
+      console.error("Error saving progress report:", error);
+      return;
     }
-  };
 
-  const handleReportLogic = async (tasks: Task[]) => {
-    const today = new Date().toISOString().split("T")[0];
+    for (const task of incompleteTasks) {
+      const newDate = new Date(task.implementation_date);
+      newDate.setDate(newDate.getDate() + 1);
+      const updatedTask: Task = {
+        ...task,
+        implementation_date: newDate.toISOString().split("T")[0],
+      };
 
-    // 完了していないタスクを翌日に移動
-    tasks.forEach((task) => {
-      if (task.implementation_date === today && !task.completed) {
-        const newDate = new Date(
-          new Date(today).getTime() + 24 * 60 * 60 * 1000
-        )
-          .toISOString()
-          .split("T")[0];
+      try {
+        const response = await fetch(
+          `http://localhost:8000/tasks/${task.task_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedTask),
+          }
+        );
 
-        const updatedTask = { ...task, implementation_date: newDate };
-        updateTaskInDatabase(updatedTask); // データベースを更新
+        if (!response.ok) {
+          throw new Error(`Failed to update task with ID: ${task.task_id}`);
+        }
+        console.log(
+          `Task ${task.task_id} updated with new date: ${updatedTask.implementation_date}`
+        );
+      } catch (error) {
+        console.error("Error updating task date:", error);
       }
-    });
-
-    // 当日のタスク完了率を算出
-    const completedTasks = tasks.filter(
-      (task) => task.implementation_date === today && task.completed
-    );
-    const completionRate =
-      tasks.length > 0
-        ? Math.round((completedTasks.length / tasks.length) * 100)
-        : 0;
-
-    // データ更新
-    setBarGraphData((prevData) => ({
-      dates: [...prevData.dates, today],
-      achievements: [...prevData.achievements, completionRate],
-    }));
-
-    console.log("Updated Bar Graph Data:", barGraphData);
+    }
+    router.back();
   };
 
   return { handleReportLogic };

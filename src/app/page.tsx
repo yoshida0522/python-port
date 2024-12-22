@@ -1,51 +1,60 @@
-"use client";
-import { useEffect, useState } from "react";
 import Menu from "./components/Menu/Menu";
 import PieGraph from "./components/PieGraph/PieGraph";
 import BarGraph from "./barGraph/BarGraph";
 import Target from "./components/Target/Target";
-import style from "./page.module.css";
 import { userGoal } from "./api/userGoal";
-import { UserData } from "./types";
+import styles from "./page.module.css";
 
-export default function Home() {
-  const [currentGraph, setCurrentGraph] = useState(0);
+export async function generateMetadata() {
+  return { title: "Dashboard" };
+}
 
-  const [userData, setUserData] = useState<UserData>({
-    name: "",
-    email: "",
-    goal: "",
-    duration: "",
-    daily_time: "",
-    approach: "",
-  });
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { graph?: string };
+}) {
+  const userId = "674d18bcc09c624f84d48a5f";
+  const userData = await userGoal(userId);
+  const currentGraph = searchParams.graph === "1" ? 1 : 0;
 
-  useEffect(() => {
-    // MongoDB のユーザーIDを指定(認証で取得したIDを使用)
-    const userId = "674d18bcc09c624f84d48a5f";
-    userGoal(userId).then((data) => setUserData(data));
-    // .catch((error) => console.error(error));
-  }, []);
-
-  const handleNext = () => {
-    setCurrentGraph((prev) => (prev === 0 ? 1 : 0));
-  };
-
-  const handlePrev = () => {
-    setCurrentGraph((prev) => (prev === 0 ? 1 : 0));
-  };
+  if (!userData) {
+    return <div>Failed to load user data.</div>;
+  }
 
   return (
-    <div className={style.container}>
+    <div className={styles.container}>
       <Target goal={userData.goal} daily={userData.duration} />
-      <div className={style.graphContainer}>
-        <button className={style.prevButton} onClick={handlePrev}>
-          ◀
-        </button>
+      <div className={styles.graphContainer}>
+        {currentGraph === 0 && (
+          <a
+            href={`/?graph=0`}
+            className={styles.prevButton}
+            style={{ visibility: "hidden" }}
+          >
+            ◀
+          </a>
+        )}
+        {currentGraph === 1 && (
+          <a
+            href={`/?graph=1`}
+            className={styles.nextButton}
+            style={{ visibility: "hidden" }}
+          >
+            ▶
+          </a>
+        )}
         {currentGraph === 0 ? <PieGraph /> : <BarGraph />}
-        <button className={style.nextButton} onClick={handleNext}>
-          ▶
-        </button>
+        {currentGraph === 1 && (
+          <a href={`/?graph=0`} className={styles.prevButton}>
+            ◀
+          </a>
+        )}
+        {currentGraph === 0 && (
+          <a href={`/?graph=1`} className={styles.nextButton}>
+            ▶
+          </a>
+        )}
       </div>
       <Menu />
     </div>
