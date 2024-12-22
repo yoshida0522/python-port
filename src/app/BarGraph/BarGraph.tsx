@@ -11,10 +11,12 @@ function BarGraph() {
     dates: [],
     achievements: [],
   });
-  const [error, setError] = useState<string | null>(null); // エラーメッセージの管理
+  const [error, setError] = useState<string | null>(null); 
+
 
   Chart.register(CategoryScale, LinearScale, BarElement);
 
+  // MongoDBからデータ取得
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,7 +33,7 @@ function BarGraph() {
           const achievements = result.map((item) => item.completion_rate);
           setGraphData({ dates, achievements });
         } else {
-          setGraphData({ dates: [], achievements: [] }); // データが空の場合
+          setGraphData({ dates: [], achievements: [] }); 
         }
       } catch (error: unknown) {
         console.error("データ取得エラー:", error);
