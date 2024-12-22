@@ -14,11 +14,12 @@
 
 .prevButton,
 .nextButton {
-  background: none;
-  border: none;
+  /* background: none; */
+  /* border: none; */
   font-size: 2rem;
   cursor: pointer;
-  user-select: none;
+  /* user-select: none; */
+  text-decoration: none;
 }
 
 .prevButton {

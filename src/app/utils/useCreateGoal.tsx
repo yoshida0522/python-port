@@ -6,12 +6,12 @@ const formatToLocalDate = () => {
   try {
     const now = new Date();
     console.log("生成された現在の日付:", now);
-    return now.toISOString().split("T")[0]; // ここでyyyy-mm-dd形式にする
+    return now.toISOString().split("T")[0];
   } catch (error) {
     console.warn("日付フォーマットエラー:", error);
     const fallbackDate = new Date();
     console.log("フォールバック日付:", fallbackDate);
-    return fallbackDate.toISOString().split("T")[0]; // フォールバックでも同様にyyyy-mm-dd形式にする
+    return fallbackDate.toISOString().split("T")[0];
   }
 };
 
@@ -31,11 +31,9 @@ const useCreateGoal = () => {
         throw new Error("APIキーが設定されていません");
       }
 
-      // `today`の日付を生成
-      const todayDate = new Date().toISOString().split("T")[0]; // yyyy-mm-dd形式に変更
+      const todayDate = new Date().toISOString().split("T")[0];
       const updatedDbData = { ...dbData, today: todayDate };
 
-      // リクエストデータをログ出力
       console.log("送信するデータ:", {
         inputs: updatedDbData,
         user: "user-id-or-identifier",
@@ -48,8 +46,8 @@ const useCreateGoal = () => {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          inputs: updatedDbData, // 入力データ
-          user: "user-id-or-identifier", // ユーザーID
+          inputs: updatedDbData,
+          user: "user-id-or-identifier",
         }),
       });
 
@@ -82,7 +80,6 @@ const useCreateGoal = () => {
     }
   };
 
-  // 日付フォーマットを実行する関数にformatToLocalDateを使う
   const parseAnswerToTasks = (answer: string): TaskObj[] => {
     const tasks: TaskObj[] = [];
     const userId = "674d18bcc09c624f84d48a5f";
@@ -102,7 +99,6 @@ const useCreateGoal = () => {
         (entry: { date: string | Date; title: string; tasks: string[] }) => {
           let implementationDate: string;
 
-          // 日付バリデーション
           if (
             typeof entry.date === "string" &&
             !isNaN(Date.parse(entry.date))
@@ -116,13 +112,11 @@ const useCreateGoal = () => {
           ) {
             implementationDate = entry.date.toISOString().split("T")[0];
           } else {
-            // 無効な日付の場合フォールバック
             console.warn("無効な日付が検出されました:", entry.date);
             implementationDate = formatToLocalDate().split("T")[0];
           }
 
           const title = entry.title;
-
 
           entry.tasks.forEach((task: string) => {
             tasks.push({

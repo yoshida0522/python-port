@@ -2,17 +2,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
 import style from "./page.module.css";
+import { GraphData, GraphDataResponse } from "../types";
 
 function BarGraph() {
   const userId = "674d18bcc09c624f84d48a5f";
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [graphData, setGraphData] = useState<{
-    dates: string[];
-    achievements: number[];
-  }>({
+  const [graphData, setGraphData] = useState<GraphData>({
     dates: [],
     achievements: [],
   });
+  const [error, setError] = useState<string | null>(null); 
+
 
   Chart.register(CategoryScale, LinearScale, BarElement);
 
@@ -21,25 +21,23 @@ function BarGraph() {
     const fetchData = async () => {
       try {
         const response = await fetch(`http://localhost:8000/graph/${userId}`);
-        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.status}`);
+        }
+
+        const result: GraphDataResponse[] = await response.json();
         console.log("取得データ:", result);
 
-        // 取得したデータが配列であることを確認
-        if (Array.isArray(result) && result.length > 0) {
-          // データが正しく取得されていれば、mapを使って処理
-          const dates = result.map(
-            (item: { task_date: string }) => item.task_date
-          );
-          const achievements = result.map(
-            (item: { completion_rate: number }) => item.completion_rate
-          );
-
+        if (result.length > 0) {
+          const dates = result.map((item) => item.task_date);
+          const achievements = result.map((item) => item.completion_rate);
           setGraphData({ dates, achievements });
         } else {
-          console.error("取得したデータは空か無効です:", result);
+          setGraphData({ dates: [], achievements: [] }); 
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("データ取得エラー:", error);
+        setError("データを取得できませんでした。");
       }
     };
 
@@ -106,7 +104,13 @@ function BarGraph() {
 
   return (
     <div className={style.barGraph}>
-      <canvas ref={canvasRef} width="420" height="300"></canvas>
+      {error ? (
+        <p>{error}</p>
+      ) : graphData.dates.length === 0 ? (
+        <p>データがありません。</p>
+      ) : (
+        <canvas ref={canvasRef} width="420" height="300"></canvas>
+      )}
     </div>
   );
 }

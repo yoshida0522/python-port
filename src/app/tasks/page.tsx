@@ -37,7 +37,7 @@ const Tasks = () => {
             </div>
           ))
         ) : (
-          <p>該当するタスクがありません。</p>
+          <p className={style.taskComment}>該当するタスクがありません。</p>
         )}
       </div>
       <div>
