@@ -1,3 +1,5 @@
+import { auth } from "../firebase";
+
 const useSaveToDatabase = () => {
   const saveToDatabase = async (data: {
     goal: string;
@@ -7,7 +9,11 @@ const useSaveToDatabase = () => {
     approach: string;
   }) => {
     try {
-      const user_Id = "674d18bcc09c624f84d48a5f";
+      const user_Id = auth.currentUser?.uid;
+
+      if (!user_Id) {
+        throw new Error("ユーザーIDが取得できませんでした");
+      }
 
       console.log("既存データを確認中: user_id =", user_Id);
       console.log("受け取ったデータ:", data);

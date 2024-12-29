@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TaskObj, WorkflowInput } from "../types";
 import useSaveTask from "./useSaveTask";
+import { getAuth } from "firebase/auth";
+import { firebaseApp } from "../firebase";
 
 const formatToLocalDate = () => {
   try {
@@ -16,15 +18,36 @@ const formatToLocalDate = () => {
 };
 
 const useCreateGoal = () => {
+  const [userId, setUserId] = useState<string | null>(null);
   const [workflowLoading, setWorkflowLoading] = useState(false);
   const [workflowError, setWorkflowError] = useState<string | null>(null);
   const { saveTasks, saveLoading, saveError } = useSaveTask();
 
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+        console.log("ユーザーが認証されていません");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const executeWorkflow = async (
     dbData: WorkflowInput
   ): Promise<string | null> => {
+    if (!userId) {
+      console.error("ユーザーが認証されていません");
+      return null;
+    }
+
     setWorkflowLoading(true);
     setWorkflowError(null);
+
     try {
       const apiKey = process.env.NEXT_PUBLIC_DIFY_WORKFLOW_API_KEY;
       if (!apiKey) {
@@ -36,7 +59,7 @@ const useCreateGoal = () => {
 
       console.log("送信するデータ:", {
         inputs: updatedDbData,
-        user: "user-id-or-identifier",
+        user: userId,
       });
 
       const response = await fetch("https://api.dify.ai/v1/workflows/run", {
@@ -47,7 +70,7 @@ const useCreateGoal = () => {
         },
         body: JSON.stringify({
           inputs: updatedDbData,
-          user: "user-id-or-identifier",
+          user: userId,
         }),
       });
 
@@ -82,7 +105,6 @@ const useCreateGoal = () => {
 
   const parseAnswerToTasks = (answer: string): TaskObj[] => {
     const tasks: TaskObj[] = [];
-    const userId = "674d18bcc09c624f84d48a5f";
 
     try {
       const jsonStart = answer.indexOf("[");
@@ -120,7 +142,7 @@ const useCreateGoal = () => {
 
           entry.tasks.forEach((task: string) => {
             tasks.push({
-              user_id: userId,
+              user_id: userId || "",
               title,
               implementation_date: implementationDate,
               description: task.trim(),

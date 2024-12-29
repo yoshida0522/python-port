@@ -1,13 +1,37 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useTasks from "../utils/useTasks";
 import daleteTask from "../utils/useTaskDelete";
+import { getAuth } from "firebase/auth";
+import { firebaseApp } from "../firebase";
+import { Task } from "../types";
 
 const Tasks = () => {
   const router = useRouter();
-  const userId = "674d18bcc09c624f84d48a5f";
-  const tasks = useTasks(userId);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const tasksFromHook = useTasks(userId || "");
+
+  useEffect(() => {
+    const auth = getAuth(firebaseApp);
+    const user = auth.currentUser;
+
+    if (user) {
+      const userId = user.uid;
+      setUserId(userId);
+    } else {
+      console.log("ユーザーが認証されていません");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId && tasksFromHook.length > 0) {
+      setTasks(tasksFromHook);
+    }
+  }, [userId, tasksFromHook]);
 
   const sortedTasks = tasks.sort((a, b) => {
     const dateA = new Date(a.implementation_date);
@@ -20,7 +44,9 @@ const Tasks = () => {
   };
 
   const handleDelete = async () => {
-    await daleteTask(userId);
+    if (userId) {
+      await daleteTask(userId);
+    }
     router.back();
   };
 

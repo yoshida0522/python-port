@@ -71,3 +71,9 @@ export interface GraphData {
   dates: string[];
   achievements: number[];
 }
+
+export interface UserGoalData {
+  goal: string;
+  userId: string;
+  duration: string;
+}
