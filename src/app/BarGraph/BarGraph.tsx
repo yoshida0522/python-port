@@ -3,46 +3,61 @@ import React, { useEffect, useRef, useState } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse } from "../types";
+import { getAuth } from "firebase/auth";
+import { firebaseApp } from "../firebase";
 
 function BarGraph() {
-  const userId = "674d18bcc09c624f84d48a5f";
+  const [userId, setUserId] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [graphData, setGraphData] = useState<GraphData>({
     dates: [],
     achievements: [],
   });
-  const [error, setError] = useState<string | null>(null); 
-
+  const [error, setError] = useState<string | null>(null);
 
   Chart.register(CategoryScale, LinearScale, BarElement);
 
-  // MongoDBからデータ取得
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/graph/${userId}`);
-        if (!response.ok) {
-          throw new Error(`Error fetching data: ${response.status}`);
-        }
+    const auth = getAuth(firebaseApp);
+    const user = auth.currentUser;
 
-        const result: GraphDataResponse[] = await response.json();
-        console.log("取得データ:", result);
-
-        if (result.length > 0) {
-          const dates = result.map((item) => item.task_date);
-          const achievements = result.map((item) => item.completion_rate);
-          setGraphData({ dates, achievements });
-        } else {
-          setGraphData({ dates: [], achievements: [] }); 
-        }
-      } catch (error: unknown) {
-        console.error("データ取得エラー:", error);
-        setError("データを取得できませんでした。");
-      }
-    };
-
-    fetchData();
+    if (user) {
+      const userId = user.uid;
+      setUserId(userId);
+    } else {
+      console.log("ユーザーが認証されていません");
+    }
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:8000/graph/${userId}`);
+          if (!response.ok) {
+            throw new Error(`Error fetching data: ${response.status}`);
+          }
+
+          const result: GraphDataResponse[] = await response.json();
+          console.log("取得データ:", result);
+
+          if (result.length > 0) {
+            const dates = result.map((item) => item.task_date);
+            const achievements = result.map((item) => item.completion_rate);
+            setGraphData({ dates, achievements });
+          } else {
+            setGraphData({ dates: [], achievements: [] });
+          }
+        } catch (error: unknown) {
+          console.error("データ取得エラー:", error);
+          setError("データを取得できませんでした。");
+        }
+      };
+
+
+      fetchData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (graphData.dates.length === 0) return;

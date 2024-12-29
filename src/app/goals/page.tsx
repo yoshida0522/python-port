@@ -46,6 +46,7 @@ const Goals = () => {
     } else {
       console.log("必要なデータが不足しています");
     }
+    router.push("/");
   };
 
   const handleBack = () => {

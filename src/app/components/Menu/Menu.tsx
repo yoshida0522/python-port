@@ -5,6 +5,7 @@ import { IoIosSettings } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaTasks } from "react-icons/fa";
 import { FaRegCalendarCheck } from "react-icons/fa";
+import { VscSignOut } from "react-icons/vsc";
 
 const Menu = () => {
   return (
@@ -31,6 +32,12 @@ const Menu = () => {
         <Link className={style.link} href="/setting">
           <IoIosSettings className={style.icon} />
           <span className={style.linkText}>設定</span>
+        </Link>
+      </div>
+      <div className={style.menu5}>
+        <Link className={style.link} href="/signOut">
+          <VscSignOut className={style.icon} />
+          <span className={style.linkText}>サインアウト</span>
         </Link>
       </div>
     </div>

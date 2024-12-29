@@ -3,26 +3,56 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useDayTasks from "../utils/useDayTask";
-// import useReport from "../utils/useReport";
+import useReport from "../utils/useReport";
+import { getAuth } from "firebase/auth";
+import { userGoal } from "../api/userGoal";
+import { Task } from "../types";
 
 const Analytics = () => {
   const router = useRouter();
-  const userId = "674d18bcc09c624f84d48a5f";
-  const tasksFromHook = useDayTasks(userId);
-  const [tasks, setTasks] = useState(tasksFromHook);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  const tasksFromHook = useDayTasks(userId || "");
+
 
   useEffect(() => {
-    setTasks(tasksFromHook);
-    console.log("Tasks in state:", tasksFromHook);
-  }, [tasksFromHook]);
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-  const filteredTasks = tasks.filter(
-    (task) =>
-      task.implementation_date.replace(/\//g, "-") ===
-      new Date().toISOString().split("T")[0]
-  );
+    if (user) {
+      const userId = user.uid;
+      setUserId(userId);
+    } else {
+      console.log("ユーザーが認証されていません");
+    }
+  }, []);
 
-  const { handleReportLogic } = useReport(userId, filteredTasks);
+  useEffect(() => {
+    if (userId) {
+      userGoal(userId).then((data) => {
+        setTasks(data || []);
+      });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId && tasksFromHook.length > 0) {
+      setTasks(tasksFromHook);
+    }
+  }, [userId, tasksFromHook]);
+
+  const filteredTasks = Array.isArray(tasks)
+    ? tasks.filter(
+        (task) =>
+          task.implementation_date.replace(/\//g, "-") ===
+          new Date().toISOString().split("T")[0]
+      )
+    : [];
+
+  const { handleReportLogic } = useReport(userId || "", filteredTasks);
+
+
   const handleBack = () => {
     router.back();
   };

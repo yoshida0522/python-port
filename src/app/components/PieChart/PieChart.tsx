@@ -10,40 +10,59 @@ import {
   ChartOptions,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { getAuth } from "firebase/auth";
+import { firebaseApp } from "../../firebase";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const ProgressPieChart = () => {
-  const userId = "674d18bcc09c624f84d48a5f";
+  const [userId, setUserId] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/tasks/${userId}`, {
-          method: "GET",
-        });
-        const data = await response.json();
+    const auth = getAuth(firebaseApp);
+    const user = auth.currentUser;
 
-        const tasks = Array.isArray(data) ? data : data.tasks || [];
-        const totalTasks = tasks.length;
-        const incompleteTasks = tasks.filter(
-          (task: { completed: boolean }) => !task.completed
-        ).length;
-        const completionPercentage =
-          totalTasks > 0
-            ? ((totalTasks - incompleteTasks) / totalTasks) * 100
-            : 0;
+    if (user) {
+      const userId = user.uid;
+      setUserId(userId);
+    } else {
+      console.log("ユーザーが認証されていません");
+    }
+  }, []);
 
-        setTotal(totalTasks);
-        setProgress(completionPercentage);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
+  useEffect(() => {
+    if (userId) {
+      const fetchTasks = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8000/tasks/${userId}`,
+            {
+              method: "GET",
+            }
+          );
+          const data = await response.json();
 
-    fetchTasks();
+          const tasks = Array.isArray(data) ? data : data.tasks || [];
+          const totalTasks = tasks.length;
+          const incompleteTasks = tasks.filter(
+            (task: { completed: boolean }) => !task.completed
+          ).length;
+          const completionPercentage =
+            totalTasks > 0
+              ? ((totalTasks - incompleteTasks) / totalTasks) * 100
+              : 0;
+
+          setTotal(totalTasks);
+          setProgress(completionPercentage);
+        } catch (error) {
+          console.error("Error fetching tasks:", error);
+        }
+      };
+
+      fetchTasks();
+    }
   }, [userId]);
 
   const percentage = total > 0 ? Math.min(progress, 100) : 0;

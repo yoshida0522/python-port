@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import style from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { userGoal } from "../api/userGoal";
+import { getAuth } from "firebase/auth";
 
 const Setting = () => {
   const router = useRouter();
@@ -10,6 +11,7 @@ const Setting = () => {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
+    user_id: "",
     goal: "",
     duration: "",
     daily_time: "",
@@ -18,8 +20,15 @@ const Setting = () => {
   });
 
   useEffect(() => {
-    const userId = "674d18bcc09c624f84d48a5f";
-    userGoal(userId).then((data) => setUserData(data));
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const userId = user.uid;
+      userGoal(userId).then((data) => setUserData(data));
+    } else {
+      console.log("ユーザーが認証されていません");
+    }
   }, []);
 
   const handleBack = () => {
@@ -36,7 +45,11 @@ const Setting = () => {
         </div>
         <div className={style.user}>
           <label className={style.idLabel}>ID</label>
-          <input className={style.userInput}></input>
+          <input
+            className={style.userInput}
+            value={userData.user_id}
+            readOnly
+          ></input>
         </div>
         <div className={style.user}>
           <label className={style.mailLabel}>メールアドレス</label>
