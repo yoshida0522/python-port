@@ -54,6 +54,7 @@ function BarGraph() {
         }
       };
 
+
       fetchData();
     }
   }, [userId]);

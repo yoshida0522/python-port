@@ -15,6 +15,7 @@ const Analytics = () => {
 
   const tasksFromHook = useDayTasks(userId || "");
 
+
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -50,6 +51,7 @@ const Analytics = () => {
     : [];
 
   const { handleReportLogic } = useReport(userId || "", filteredTasks);
+
 
   const handleBack = () => {
     router.back();
