@@ -130,20 +130,46 @@ function BarGraph() {
     dates: [],
     achievements: [],
   });
+<<<<<<< HEAD
   const [error, setError] = useState<string | null>(null);
+=======
+  const [error, setError] = useState<string | null>(null); 
+
+>>>>>>> b1fee1843aefd764461c2fb09e3980063b84f5db
 
   Chart.register(CategoryScale, LinearScale, BarElement);
 
+  // MongoDBからデータ取得
   useEffect(() => {
     const auth = getAuth(firebaseApp);
     const user = auth.currentUser;
 
+<<<<<<< HEAD
     if (user) {
       const userId = user.uid;
       setUserId(userId);
     } else {
       console.log("ユーザーが認証されていません");
     }
+=======
+        const result: GraphDataResponse[] = await response.json();
+        console.log("取得データ:", result);
+
+        if (result.length > 0) {
+          const dates = result.map((item) => item.task_date);
+          const achievements = result.map((item) => item.completion_rate);
+          setGraphData({ dates, achievements });
+        } else {
+          setGraphData({ dates: [], achievements: [] }); 
+        }
+      } catch (error: unknown) {
+        console.error("データ取得エラー:", error);
+        setError("データを取得できませんでした。");
+      }
+    };
+
+    fetchData();
+>>>>>>> b1fee1843aefd764461c2fb09e3980063b84f5db
   }, []);
 
   useEffect(() => {

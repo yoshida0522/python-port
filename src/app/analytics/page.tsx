@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useDayTasks from "../utils/useDayTask";
+<<<<<<< HEAD
 import useReport from "../utils/useReport";
 import { getAuth } from "firebase/auth";
 import { userGoal } from "../api/userGoal";
 import { Task } from "../types";
+=======
+// import useReport from "../utils/useReport";
+>>>>>>> b1fee1843aefd764461c2fb09e3980063b84f5db
 
 const Analytics = () => {
   const router = useRouter();
