@@ -32,11 +32,14 @@ const Analytics = () => {
     }
   }, [userId, tasksFromHook]);
 
+  const today = new Date();
+  const japanToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
+  const formattedToday = japanToday.toISOString().split("T")[0];
+
   const filteredTasks = Array.isArray(tasks)
     ? tasks.filter(
         (task) =>
-          task.implementation_date.replace(/\//g, "-") ===
-          new Date().toISOString().split("T")[0]
+          task.implementation_date.replace(/\//g, "-") === formattedToday
       )
     : [];
 
