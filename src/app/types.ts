@@ -31,8 +31,9 @@ export interface UserData {
 }
 
 export interface TargetProps {
-  goal: string;
-  daily: string;
+  goal?: string;
+  daily?: string;
+  userId: string;
 }
 
 export interface WorkflowInput {
@@ -74,6 +75,10 @@ export interface GraphData {
 
 export interface UserGoalData {
   goal: string;
-  userId: string;
+  user_id: string;
   duration: string;
+}
+
+export interface UserIdData {
+  userId: string;
 }

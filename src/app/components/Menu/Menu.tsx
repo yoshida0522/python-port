@@ -6,18 +6,19 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaTasks } from "react-icons/fa";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { VscSignOut } from "react-icons/vsc";
+import { UserIdData } from "@/app/types";
 
-const Menu = () => {
+const Menu: React.FC<UserIdData> = ({ userId }) => {
   return (
     <div className={style.menu}>
       <div className={style.menu1}>
-        <Link className={style.link} href="/analytics">
+        <Link className={style.link} href={`/analytics/${userId}`}>
           <FaRegCalendarCheck className={style.icon} />
           <span className={style.linkText}>進捗入力</span>
         </Link>
       </div>
       <div className={style.menu2}>
-        <Link className={style.link} href="/tasks">
+        <Link className={style.link} href={`/tasks/${userId}`}>
           <FaTasks className={style.icon} />
           <span className={style.linkText}>タスク確認</span>
         </Link>
@@ -29,7 +30,7 @@ const Menu = () => {
         </Link>
       </div>
       <div className={style.menu4}>
-        <Link className={style.link} href="/setting">
+        <Link className={style.link} href={`/setting/${userId}`}>
           <IoIosSettings className={style.icon} />
           <span className={style.linkText}>設定</span>
         </Link>

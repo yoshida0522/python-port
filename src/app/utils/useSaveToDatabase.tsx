@@ -18,9 +18,12 @@ const useSaveToDatabase = () => {
       console.log("既存データを確認中: user_id =", user_Id);
       console.log("受け取ったデータ:", data);
 
+      const currentDate = new Date().toISOString().split("T")[0];
+
       const requestData = {
         ...data,
         user_id: user_Id,
+        date: currentDate,
       };
 
       const checkResponse = await fetch(

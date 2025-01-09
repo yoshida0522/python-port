@@ -1,44 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import style from "./page.module.css";
-import useDayTasks from "../utils/useDayTask";
-import useReport from "../utils/useReport";
-import { getAuth } from "firebase/auth";
-import { userGoal } from "../api/userGoal";
-import { Task } from "../types";
+import useDayTasks from "../../utils/useDayTask";
+import useReport from "../../utils/useReport";
+import { userGoal } from "../../api/userGoal";
+import { Task } from "../../types";
+import { useParams, useRouter } from "next/navigation";
 
 const Analytics = () => {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const { userId } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
-
-  const tasksFromHook = useDayTasks(userId || "");
-
-
-  useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user) {
-      const userId = user.uid;
-      setUserId(userId);
-    } else {
-      console.log("ユーザーが認証されていません");
-    }
-  }, []);
+  const tasksFromHook = useDayTasks((userId as string) || "");
 
   useEffect(() => {
     if (userId) {
-      userGoal(userId).then((data) => {
-        setTasks(data || []);
-      });
-    }
-  }, [userId]);
+      const fetchData = async () => {
+        try {
+          const goalData = await userGoal(userId as string);
+          setTasks(goalData || []);
 
-  useEffect(() => {
-    if (userId && tasksFromHook.length > 0) {
-      setTasks(tasksFromHook);
+          if (tasksFromHook.length > 0) {
+            setTasks(tasksFromHook);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData();
     }
   }, [userId, tasksFromHook]);
 
@@ -50,8 +40,10 @@ const Analytics = () => {
       )
     : [];
 
-  const { handleReportLogic } = useReport(userId || "", filteredTasks);
-
+  const { handleReportLogic } = useReport(
+    (userId as string) || "",
+    filteredTasks
+  );
 
   const handleBack = () => {
     router.back();
@@ -95,7 +87,7 @@ const Analytics = () => {
 
   return (
     <div className={style.taskList}>
-      <h1>タスク一覧</h1>
+      <h1>今日のタスク</h1>
       <div className={style.taskCardContainer}>
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (

@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import style from "./page.module.css";
-import { useRouter } from "next/navigation";
-import { userGoal } from "../api/userGoal";
-import { getAuth } from "firebase/auth";
+import { useParams, useRouter } from "next/navigation";
+import { userGoal } from "../../api/userGoal";
 
 const Setting = () => {
   const router = useRouter();
-
+  const { userId } = useParams();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -20,16 +19,13 @@ const Setting = () => {
   });
 
   useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (user) {
-      const userId = user.uid;
-      userGoal(userId).then((data) => setUserData(data));
-    } else {
-      console.log("ユーザーが認証されていません");
+    const resolvedUserId = Array.isArray(userId) ? userId[0] : userId;
+    if (resolvedUserId) {
+      userGoal(resolvedUserId)
+        .then((data) => setUserData(data))
+        .catch((error) => console.error("Error fetching user data:", error));
     }
-  }, []);
+  }, [userId]);
 
   const handleBack = () => {
     router.back();

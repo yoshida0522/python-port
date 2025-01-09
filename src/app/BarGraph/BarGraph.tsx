@@ -2,12 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
 import style from "./page.module.css";
-import { GraphData, GraphDataResponse } from "../types";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "../firebase";
+import { GraphData, GraphDataResponse, UserIdData } from "../types";
 
-function BarGraph() {
-  const [userId, setUserId] = useState<string | null>(null);
+const BarGraph: React.FC<UserIdData> = ({ userId }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [graphData, setGraphData] = useState<GraphData>({
     dates: [],
@@ -16,18 +13,6 @@ function BarGraph() {
   const [error, setError] = useState<string | null>(null);
 
   Chart.register(CategoryScale, LinearScale, BarElement);
-
-  useEffect(() => {
-    const auth = getAuth(firebaseApp);
-    const user = auth.currentUser;
-
-    if (user) {
-      const userId = user.uid;
-      setUserId(userId);
-    } else {
-      console.log("ユーザーが認証されていません");
-    }
-  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -53,7 +38,6 @@ function BarGraph() {
           setError("データを取得できませんでした。");
         }
       };
-
 
       fetchData();
     }
@@ -128,6 +112,6 @@ function BarGraph() {
       )}
     </div>
   );
-}
+};
 
 export default BarGraph;

@@ -18,7 +18,6 @@ const Goals = () => {
     const [goal, duration, daily_time, level, approach] = history.map(
       (entry) => entry.question
     );
-    console.log(goal, duration, daily_time, level, approach);
     if (goal && duration && daily_time && level && approach) {
       const dbData = {
         goal,

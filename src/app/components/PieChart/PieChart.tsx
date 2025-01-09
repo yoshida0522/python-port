@@ -10,27 +10,14 @@ import {
   ChartOptions,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "../../firebase";
+import { UserIdData } from "@/app/types";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const ProgressPieChart = () => {
-  const [userId, setUserId] = useState<string | null>(null);
+const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
   const [progress, setProgress] = useState(0);
   const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    const auth = getAuth(firebaseApp);
-    const user = auth.currentUser;
-
-    if (user) {
-      const userId = user.uid;
-      setUserId(userId);
-    } else {
-      console.log("ユーザーが認証されていません");
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (userId) {
@@ -58,6 +45,8 @@ const ProgressPieChart = () => {
           setProgress(completionPercentage);
         } catch (error) {
           console.error("Error fetching tasks:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -102,7 +91,15 @@ const ProgressPieChart = () => {
 
   return (
     <div className={style.graphSize}>
-      <Pie data={chartData} options={options} />
+      {isLoading ? (
+        <p>データを読み込んでいます...</p>
+      ) : total === 0 ? (
+        <div className={style.center}>
+          <p className={style.comment}>データがありません</p>
+        </div>
+      ) : (
+        <Pie data={chartData} options={options} />
+      )}
     </div>
   );
 };
