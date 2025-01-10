@@ -10,6 +10,7 @@ import {
   ChartOptions,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import confetti from "canvas-confetti";
 import { UserIdData } from "@/app/types";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
@@ -53,6 +54,26 @@ const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
       fetchTasks();
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (progress === 100) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#ff0", "#ff6347", "#87ceeb", "#32cd32"],
+      });
+
+      setTimeout(() => {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.4 },
+          colors: ["#ff0", "#ff6347", "#87ceeb", "#32cd32"],
+        });
+      }, 1000);
+    }
+  }, [progress]);
 
   const percentage = total > 0 ? Math.min(progress, 100) : 0;
   const remainingPercentage = 100 - percentage;
