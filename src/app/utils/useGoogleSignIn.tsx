@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   getAuth,
   signInWithPopup,
@@ -12,6 +12,7 @@ export const useGoogleSignIn = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     const auth = getAuth(firebaseApp);
@@ -33,7 +34,7 @@ export const useGoogleSignIn = () => {
       const loggedInUser: User = result.user;
       setUser(loggedInUser);
 
-      const response = await fetch("http://localhost:8000/users", {
+      const response = await fetch(`${BASE_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

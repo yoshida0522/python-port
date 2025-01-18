@@ -1,16 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Task } from "../types";
 
 const useDayTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(
-          `http://127.0.0.1:8000/tasks?user_id=${userId}`
-        );
+        const response = await fetch(`${BASE_URL}/tasks?user_id=${userId}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch tasks, status: ${response.status}`);
         }
@@ -30,7 +29,7 @@ const useDayTasks = (userId: string) => {
     };
 
     fetchTasks();
-  }, [userId]);
+  }, [userId, BASE_URL]);
 
   return tasks;
 };

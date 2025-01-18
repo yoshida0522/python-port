@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
@@ -11,6 +11,7 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
     achievements: [],
   });
   const [error, setError] = useState<string | null>(null);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   Chart.register(CategoryScale, LinearScale, BarElement);
 
@@ -18,7 +19,7 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
     if (userId) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/graph/${userId}`);
+          const response = await fetch(`${BASE_URL}/graph/${userId}`);
           if (!response.ok) {
             throw new Error(`Error fetching data: ${response.status}`);
           }
@@ -41,7 +42,7 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
 
       fetchData();
     }
-  }, [userId]);
+  }, [userId, BASE_URL]);
 
   useEffect(() => {
     if (graphData.dates.length === 0) return;

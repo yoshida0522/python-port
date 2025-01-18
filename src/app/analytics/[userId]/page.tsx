@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import style from "./page.module.css";
 import useDayTasks from "../../utils/useDayTask";
 import useReport from "../../utils/useReport";
@@ -12,6 +12,7 @@ const Analytics = () => {
   const { userId } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const tasksFromHook = useDayTasks((userId as string) || "");
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     if (userId) {
@@ -64,7 +65,7 @@ const Analytics = () => {
         completed: !taskToUpdate.completed,
       };
 
-      const response = await fetch(`http://localhost:8000/tasks/${task_Id}`, {
+      const response = await fetch(`${BASE_URL}/tasks/${task_Id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

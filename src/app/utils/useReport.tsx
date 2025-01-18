@@ -4,6 +4,7 @@ import { Task } from "../types";
 
 const useReport = (userId: string, filteredTasks: Task[]) => {
   const router = useRouter();
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleReportLogic = async () => {
     const totalTasks = filteredTasks.length;
@@ -37,7 +38,7 @@ const useReport = (userId: string, filteredTasks: Task[]) => {
     };
 
     try {
-      const response = await fetch(`http://localhost:8000/graph/${userId}`, {
+      const response = await fetch(`${BASE_URL}/graph/${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

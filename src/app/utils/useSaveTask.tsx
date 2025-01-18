@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { TaskObj } from "../types";
 
 const useSaveTask = () => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   const saveTasks = async (tasks: TaskObj[]) => {
     setSaveLoading(true);
     setSaveError(null);
     try {
-      const response = await fetch("http://localhost:8000/save-tasks/", {
+      const response = await fetch(`${BASE_URL}/save-tasks/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +25,6 @@ const useSaveTask = () => {
       }
 
       console.log("タスクが正常に保存されました");
-
     } finally {
       setSaveLoading(false);
     }

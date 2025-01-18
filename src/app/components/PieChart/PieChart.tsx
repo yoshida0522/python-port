@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import style from "./page.module.css";
 import {
@@ -19,17 +19,15 @@ const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
   const [progress, setProgress] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     if (userId) {
       const fetchTasks = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:8000/tasks/${userId}`,
-            {
-              method: "GET",
-            }
-          );
+          const response = await fetch(`${BASE_URL}/tasks/${userId}`, {
+            method: "GET",
+          });
           const data = await response.json();
 
           const tasks = Array.isArray(data) ? data : data.tasks || [];
@@ -53,7 +51,7 @@ const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
 
       fetchTasks();
     }
-  }, [userId]);
+  }, [userId, BASE_URL]);
 
   useEffect(() => {
     if (progress === 100) {

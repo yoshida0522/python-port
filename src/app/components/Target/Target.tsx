@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import style from "./page.module.css";
 import { TargetProps, Task } from "@/app/types";
 
 const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
   const [remainingDays, setRemainingDays] = useState<number | null>(null);
+  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     const calculateRemainingDays = (tasks: Task[]) => {
@@ -27,7 +28,7 @@ const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/tasks/${userId}`, {
+        const response = await fetch(`${BASE_URL}/tasks/${userId}`, {
           method: "GET",
         });
 
@@ -53,7 +54,7 @@ const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
     }, 24 * 60 * 60 * 1000);
 
     return () => clearInterval(intervalId);
-  }, [userId]);
+  }, [userId, BASE_URL]);
 
   return (
     <div className={style.targetForm}>

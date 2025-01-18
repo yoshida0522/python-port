@@ -1,6 +1,7 @@
 import { auth } from "../firebase";
 
 const useSaveToDatabase = () => {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   const saveToDatabase = async (data: {
     goal: string;
     duration: string;
@@ -26,15 +27,12 @@ const useSaveToDatabase = () => {
         date: currentDate,
       };
 
-      const checkResponse = await fetch(
-        `http://127.0.0.1:8000/goals/${user_Id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const checkResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!checkResponse.ok) {
         throw new Error("データベース確認中にエラーが発生しました");
@@ -50,16 +48,13 @@ const useSaveToDatabase = () => {
       ) {
         console.log("一致するuser_idが見つかりました。データを更新します。");
 
-        const updateResponse = await fetch(
-          `http://127.0.0.1:8000/goals/${user_Id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          }
-        );
+        const updateResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        });
 
         if (!updateResponse.ok) {
           const errorDetails = await updateResponse.json();
@@ -75,16 +70,13 @@ const useSaveToDatabase = () => {
         "一致するuser_idは見つかりませんでした。新しいデータを追加します。"
       );
 
-      const insertResponse = await fetch(
-        `http://127.0.0.1:8000/goals/${user_Id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      const insertResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
       console.log("送信するデータ:", requestData);
 
