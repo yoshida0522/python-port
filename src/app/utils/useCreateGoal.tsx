@@ -4,18 +4,50 @@ import useSaveTask from "./useSaveTask";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "../firebase";
 
-const formatToLocalDate = () => {
+// const formatToLocalDate = () => {
+//   try {
+//     const now = new Date();
+//     console.log("生成された現在の日付:", now);
+//     return now.toISOString().split("T")[0];
+//   } catch (error) {
+//     console.warn("日付フォーマットエラー:", error);
+//     const fallbackDate = new Date();
+//     console.log("フォールバック日付:", fallbackDate);
+//     return fallbackDate.toISOString().split("T")[0];
+//   }
+// };
+const formatToLocalDate = (): string => {
   try {
     const now = new Date();
-    console.log("生成された現在の日付:", now);
-    return now.toISOString().split("T")[0];
+    console.log("生成された現在の日付 (ローカル):", now.toLocaleString());
+
+    const localDate = now.toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const formattedDate = localDate.replace(/\//g, "-");
+    return formattedDate;
   } catch (error) {
     console.warn("日付フォーマットエラー:", error);
+
     const fallbackDate = new Date();
-    console.log("フォールバック日付:", fallbackDate);
-    return fallbackDate.toISOString().split("T")[0];
+    console.log(
+      "フォールバック日付 (ローカル):",
+      fallbackDate.toLocaleString()
+    );
+
+    const fallbackLocalDate = fallbackDate.toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    return fallbackLocalDate.replace(/\//g, "-");
   }
 };
+
+console.log("ローカルタイムゾーンの日付:", formatToLocalDate());
 
 const useCreateGoal = () => {
   const [userId, setUserId] = useState<string | null>(null);
