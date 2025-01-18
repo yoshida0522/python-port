@@ -4,7 +4,7 @@
   margin: 0 auto;
 }
 
-.graphContainer {
+/* .graphContainer {
   display: flex;
   height: 300px;
   align-items: center;
@@ -14,11 +14,8 @@
 
 .prevButton,
 .nextButton {
-  /* background: none; */
-  /* border: none; */
   font-size: 2rem;
   cursor: pointer;
-  /* user-select: none; */
   text-decoration: none;
 }
 
@@ -30,7 +27,50 @@
 .nextButton {
   position: absolute;
   right: 0;
+} */
+
+.carouselContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
+
+.carousel {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.carouselItem {
+  flex: 0 0 100%;
+}
+
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.prevButton,
+.nextButton {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.prevButton:hover,
+.nextButton:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* ここまで */
 
 .signIn {
   display: flex;

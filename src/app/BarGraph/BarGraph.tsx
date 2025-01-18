@@ -66,6 +66,7 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
           x: {
             title: {

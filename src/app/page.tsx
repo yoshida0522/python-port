@@ -6,37 +6,28 @@ import PieGraph from "../app/components/PieGraph/PieGraph";
 import BarGraph from "./BarGraph/BarGraph";
 import Target from "../app/components/Target/Target";
 import styles from "./page.module.css";
-import { useSearchParams } from "next/navigation";
 import { UserGoalData } from "./types";
 import { useGoogleSignIn } from "../app/utils/useGoogleSignIn";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<UserGoalData | null>(null);
-  const searchParams = useSearchParams();
+  const [currentGraph, setCurrentGraph] = useState<number>(0);
   const { user, loading: authLoading, handleGoogleSignIn } = useGoogleSignIn();
 
   useEffect(() => {
-    if (authLoading) {
-      return;
-    }
+    if (authLoading || !user) return;
 
-    if (user) {
-      const fetchData = async () => {
-        const userId = user.uid;
-        const data = await userGoal(userId);
-        setUserData(data);
-      };
+    const fetchData = async () => {
+      const data = await userGoal(user.uid);
+      setUserData(data);
+      setLoading(false);
+    };
 
-      fetchData();
-    }
-
-    setLoading(false);
+    fetchData();
   }, [authLoading, user]);
 
-  if (authLoading || loading) {
-    return <div>Loading...</div>;
-  }
+  if (authLoading || loading) return <div>Loading...</div>;
 
   if (!user) {
     return (
@@ -48,11 +39,11 @@ export default function Home() {
     );
   }
 
-  if (!userData) {
-    return <div>Failed to load user data.</div>;
-  }
+  if (!userData) return <div>Failed to load user data.</div>;
 
-  const currentGraph = searchParams.get("graph") === "1" ? 1 : 0;
+  const handleSlideChange = (direction: number) => {
+    setCurrentGraph((prevGraph) => (prevGraph + direction + 2) % 2); // 0と1で循環
+  };
 
   return (
     <div className={styles.container}>
@@ -61,40 +52,35 @@ export default function Home() {
         daily={userData.duration}
         userId={userData.user_id}
       />
-      <div className={styles.graphContainer}>
-        {currentGraph === 0 && (
-          <a
-            href={`/?graph=0`}
+      <div className={styles.carouselContainer}>
+        <div
+          className={styles.carousel}
+          style={{
+            transform: `translateX(-${currentGraph * 100}%)`,
+            transition: "transform 0.5s ease",
+          }}
+        >
+          <div className={styles.carouselItem}>
+            <PieGraph userId={userData.user_id} />
+          </div>
+          <div className={styles.carouselItem}>
+            <BarGraph userId={userData.user_id} />
+          </div>
+        </div>
+        <div className={styles.navigationButtons}>
+          <button
             className={styles.prevButton}
-            style={{ visibility: "hidden" }}
+            onClick={() => handleSlideChange(-1)}
           >
             ◀
-          </a>
-        )}
-        {currentGraph === 1 && (
-          <a
-            href={`/?graph=1`}
+          </button>
+          <button
             className={styles.nextButton}
-            style={{ visibility: "hidden" }}
+            onClick={() => handleSlideChange(1)}
           >
             ▶
-          </a>
-        )}
-        {currentGraph === 0 ? (
-          <PieGraph userId={userData.user_id} />
-        ) : (
-          <BarGraph userId={userData.user_id} />
-        )}
-        {currentGraph === 1 && (
-          <a href={`/?graph=0`} className={styles.prevButton}>
-            ◀
-          </a>
-        )}
-        {currentGraph === 0 && (
-          <a href={`/?graph=1`} className={styles.nextButton}>
-            ▶
-          </a>
-        )}
+          </button>
+        </div>
       </div>
       <Menu userId={userData.user_id} />
     </div>
