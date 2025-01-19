@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import {
   getAuth,
   signInWithPopup,
@@ -12,7 +12,7 @@ export const useGoogleSignIn = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const auth = getAuth(firebaseApp);
@@ -51,6 +51,7 @@ export const useGoogleSignIn = () => {
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(`エラーが発生しました: ${err.message}`);
+        console.error("SignIn Error:", err.message);
       } else {
         setError("予期しないエラーが発生しました。");
       }

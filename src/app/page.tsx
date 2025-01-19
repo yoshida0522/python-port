@@ -10,7 +10,7 @@ import { UserGoalData } from "./types";
 import { useGoogleSignIn } from "../app/utils/useGoogleSignIn";
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState<UserGoalData | null>(null);
   const [currentGraph, setCurrentGraph] = useState<number>(0);
   const { user, loading: authLoading, handleGoogleSignIn } = useGoogleSignIn();

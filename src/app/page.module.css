@@ -4,31 +4,6 @@
   margin: 0 auto;
 }
 
-/* .graphContainer {
-  display: flex;
-  height: 300px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.prevButton,
-.nextButton {
-  font-size: 2rem;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.prevButton {
-  position: absolute;
-  left: 0;
-}
-
-.nextButton {
-  position: absolute;
-  right: 0;
-} */
-
 .carouselContainer {
   position: relative;
   width: 100%;
@@ -69,8 +44,6 @@
 .nextButton:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
-
-/* ここまで */
 
 .signIn {
   display: flex;
