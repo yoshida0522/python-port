@@ -16,15 +16,21 @@ export default function Home() {
   const { user, loading: authLoading, handleGoogleSignIn } = useGoogleSignIn();
 
   useEffect(() => {
-    if (authLoading || !user) return;
+    if (!authLoading && user) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const data = await userGoal(user.uid);
+          setUserData(data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    const fetchData = async () => {
-      const data = await userGoal(user.uid);
-      setUserData(data);
-      setLoading(false);
-    };
-
-    fetchData();
+      fetchData();
+    }
   }, [authLoading, user]);
 
   if (authLoading || loading) return <div>Loading...</div>;
