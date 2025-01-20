@@ -20,7 +20,8 @@ export default function Home() {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const data = await userGoal(user.uid);
+          const userId = user.uid;
+          const data = await userGoal(userId);
           setUserData(data);
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -48,7 +49,7 @@ export default function Home() {
   if (!userData) return <div>Failed to load user data.</div>;
 
   const handleSlideChange = (direction: number) => {
-    setCurrentGraph((prevGraph) => (prevGraph + direction + 2) % 2); // 0と1で循環
+    setCurrentGraph((prevGraph) => (prevGraph + direction + 2) % 2);
   };
 
   return (
