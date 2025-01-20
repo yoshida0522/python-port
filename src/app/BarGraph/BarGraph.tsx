@@ -1,6 +1,12 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { BarElement, CategoryScale, Chart, LinearScale } from "chart.js";
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  LinearScale,
+} from "chart.js";
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
 
@@ -13,7 +19,8 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
   const [error, setError] = useState<string | null>(null);
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
-  Chart.register(CategoryScale, LinearScale, BarElement);
+  // 必要なコンポーネントを登録
+  Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
   useEffect(() => {
     if (userId) {
