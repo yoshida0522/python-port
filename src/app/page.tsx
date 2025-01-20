@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { userGoal } from "../app/api/userGoal";
 import Menu from "../app/components/Menu/Menu";
 import PieGraph from "../app/components/PieGraph/PieGraph";
-import BarGraph from "./BarGraph/BarGraph";
+import BarGraph from "../app/BarGraph/BarGraph";
 import Target from "../app/components/Target/Target";
 import styles from "./page.module.css";
 import { UserGoalData } from "./types";
