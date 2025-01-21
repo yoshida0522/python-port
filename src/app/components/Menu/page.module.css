@@ -80,3 +80,23 @@
   font-size: 20px;
   margin-bottom: 5px;
 }
+
+@media screen and (max-width: 480px) {
+  .menu {
+    display: block;
+  }
+
+  .menu1,
+  .menu2,
+  .menu3,
+  .menu4,
+  .menu5 {
+    margin: 10px auto;
+    width: 250px;
+  }
+
+  .icon,
+  .link {
+    margin: 0 auto;
+  }
+}

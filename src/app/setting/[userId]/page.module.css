@@ -52,22 +52,10 @@
   margin: 0 auto;
 }
 
-.hearingGoal {
-  margin-right: 10px;
-}
-
-.hearingDaily {
-  margin-right: 10px;
-}
-
-.hearingTime {
-  margin-right: 10px;
-}
-
-.hearingLevel {
-  margin-right: 10px;
-}
-
+.hearingGoal,
+.hearingDaily,
+.hearingTime,
+.hearingLevel,
 .hearingProcedure {
   margin-right: 10px;
 }
@@ -75,4 +63,22 @@
 .hearingInput {
   width: 300px;
   margin-right: 50px;
+}
+
+@media screen and (max-width: 480px) {
+  .nameLabel,
+  .idLabel,
+  .mailLabel {
+    display: block;
+    margin: 5px auto;
+  }
+
+  .userInput {
+    margin-left: 15px;
+  }
+
+  .hearingInput {
+    display: block;
+    margin-left: 10px;
+  }
 }

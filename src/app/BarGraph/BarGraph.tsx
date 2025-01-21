@@ -19,7 +19,6 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
   const [error, setError] = useState<string | null>(null);
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
-  // 必要なコンポーネントを登録
   Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
   useEffect(() => {
