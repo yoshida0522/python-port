@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import style from "./page.module.css";
 import { TargetProps, Task } from "@/app/types";
 
-const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
+const Target: React.FC<TargetProps> = ({ goal, daily, user_id }) => {
   const [remainingDays, setRemainingDays] = useState<number | null>(null);
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
@@ -28,7 +28,7 @@ const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/tasks/${userId}`, {
+        const response = await fetch(`${BASE_URL}/tasks/${user_id}`, {
           method: "GET",
         });
 
@@ -54,7 +54,7 @@ const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
     }, 24 * 60 * 60 * 1000);
 
     return () => clearInterval(intervalId);
-  }, [userId, BASE_URL]);
+  }, [user_id, BASE_URL]);
 
   return (
     <div className={style.targetForm}>
@@ -66,11 +66,11 @@ const Target: React.FC<TargetProps> = ({ goal, daily, userId }) => {
       </div>
       <div className={style.target}>
         <span>目標</span>
-        <h2>{goal}</h2>
+        <h2 className={style.goalText}>{goal}</h2>
       </div>
       <div className={style.period}>
         <span>期間</span>
-        <h2>{daily}</h2>
+        <h2 className={style.dailyText}>{daily}</h2>
       </div>
     </div>
   );

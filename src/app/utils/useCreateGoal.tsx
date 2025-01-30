@@ -115,6 +115,8 @@ const useCreateGoal = () => {
       }
 
       const result = await response.json();
+      console.log("APIレスポンス:", result);
+
       const answer = result?.data?.outputs?.answer;
       if (!answer) throw new Error("outputsが不正です");
 

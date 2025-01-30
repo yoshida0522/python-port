@@ -9,21 +9,30 @@ import { useParams, useRouter } from "next/navigation";
 
 const Analytics = () => {
   const router = useRouter();
-  const { userId } = useParams();
+  const { user_id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
-  const tasksFromHook = useDayTasks((userId as string) || "");
+  const tasksFromHook = useDayTasks((user_id as string) || "");
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
-    if (userId) {
+    if (user_id) {
       const fetchData = async () => {
         try {
-          const goalData = await userGoal(userId as string);
+          const goalData = await userGoal(user_id as string);
           setTasks(goalData || []);
 
           if (tasksFromHook.length > 0) {
             setTasks(tasksFromHook);
           }
+
+          // graphデータを取得
+          const response = await fetch(`${BASE_URL}/graph/${user_id}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch graph data");
+          }
+          const graphData = await response.json();
+          console.log("Graph Data:", graphData);
+          // ここで graphData を適切に使いたい場合は、setTasks や他の状態に追加する
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -31,7 +40,7 @@ const Analytics = () => {
 
       fetchData();
     }
-  }, [userId, tasksFromHook]);
+  }, [user_id, tasksFromHook, BASE_URL]);
 
   const today = new Date();
   const japanToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
@@ -45,7 +54,7 @@ const Analytics = () => {
     : [];
 
   const { handleReportLogic } = useReport(
-    (userId as string) || "",
+    (user_id as string) || "",
     filteredTasks
   );
 
@@ -112,10 +121,12 @@ const Analytics = () => {
         )}
       </div>
       <div>
-        <button onClick={handleBack} className={style.back}>
+        <button className={style.back} onClick={handleBack}>
           戻る
         </button>
-        <button onClick={handleReportLogic}>進捗報告</button>
+        <button className={style.report} onClick={handleReportLogic}>
+          進捗報告
+        </button>
       </div>
     </div>
   );

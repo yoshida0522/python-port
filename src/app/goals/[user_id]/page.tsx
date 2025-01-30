@@ -1,13 +1,15 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import style from "./page.module.css";
-import useSaveToDatabase from "../utils/useSaveToDatabase";
-import useSendRequest from "../utils/useSendRequest";
-import useCreateGoal from "../utils/useCreateGoal";
+import useSaveToDatabase from "../../utils/useSaveToDatabase";
+import useSendRequest from "../../utils/useSendRequest";
+import useCreateGoal from "../../utils/useCreateGoal";
 import { useState } from "react";
+import daleteTask from "../../utils/useTaskDelete";
 
 const Goals = () => {
   const router = useRouter();
+  const { user_id } = useParams();
   const { saveToDatabase } = useSaveToDatabase();
   const { question, setQuestion, history, sendRequest, loading } =
     useSendRequest();
@@ -15,6 +17,9 @@ const Goals = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
+    if (user_id) {
+      await daleteTask(user_id as string);
+    }
     const [goal, duration, daily_time, level, approach] = history.map(
       (entry) => entry.question
     );
@@ -56,21 +61,32 @@ const Goals = () => {
     <div className={style.center}>
       <h1>ヒアリング</h1>
       <textarea
+        className={style.textarea}
         value={question}
         onChange={(e) => {
           setQuestion(e.target.value);
         }}
       ></textarea>
-      <div>
-        <button onClick={sendRequest} disabled={loading}>
+      <div className={style.button}>
+        <button
+          className={style.sendButton}
+          onClick={sendRequest}
+          disabled={loading}
+        >
           送信
         </button>
-        <button onClick={handleSave} disabled={loading || workflowLoading}>
+        <button
+          className={style.saveButton}
+          onClick={handleSave}
+          disabled={loading || workflowLoading}
+        >
           保存
         </button>
-      </div>
-      <div className={style.back}>
-        <button onClick={handleBack}>戻る</button>
+        {/* </div>
+      <div className={style.back}> */}
+        <button className={style.backButton} onClick={handleBack}>
+          戻る
+        </button>
       </div>
       <h2>会話履歴</h2>
       {loading && <p className={style.loading}>生成中です...</p>}

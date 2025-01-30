@@ -2,14 +2,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Task } from "../types";
 
-const useDayTasks = (userId: string) => {
+const useDayTasks = (user_id: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/tasks?user_id=${userId}`);
+        const response = await fetch(`${BASE_URL}/tasks?user_id=${user_id}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch tasks, status: ${response.status}`);
         }
@@ -29,7 +29,7 @@ const useDayTasks = (userId: string) => {
     };
 
     fetchTasks();
-  }, [userId, BASE_URL]);
+  }, [user_id, BASE_URL]);
 
   return tasks;
 };

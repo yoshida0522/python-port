@@ -10,7 +10,7 @@ import {
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
 
-const BarGraph: React.FC<UserIdData> = ({ userId }) => {
+const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [graphData, setGraphData] = useState<GraphData>({
     dates: [],
@@ -22,10 +22,10 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
   Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
   useEffect(() => {
-    if (userId) {
+    if (user_id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`${BASE_URL}/graph/${userId}`);
+          const response = await fetch(`${BASE_URL}/graph/${user_id}`);
           if (!response.ok) {
             throw new Error(`Error fetching data: ${response.status}`);
           }
@@ -48,7 +48,7 @@ const BarGraph: React.FC<UserIdData> = ({ userId }) => {
 
       fetchData();
     }
-  }, [userId, BASE_URL]);
+  }, [user_id, BASE_URL]);
 
   useEffect(() => {
     if (graphData.dates.length === 0) return;

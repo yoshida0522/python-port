@@ -15,17 +15,17 @@ import { UserIdData } from "@/app/types";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
+const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
   const [progress, setProgress] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
 
   useEffect(() => {
-    if (userId) {
+    if (user_id) {
       const fetchTasks = async () => {
         try {
-          const response = await fetch(`${BASE_URL}/tasks/${userId}`, {
+          const response = await fetch(`${BASE_URL}/tasks/${user_id}`, {
             method: "GET",
           });
           const data = await response.json();
@@ -51,7 +51,7 @@ const ProgressPieChart: React.FC<UserIdData> = ({ userId }) => {
 
       fetchTasks();
     }
-  }, [userId, BASE_URL]);
+  }, [user_id, BASE_URL]);
 
   useEffect(() => {
     if (progress === 100) {

@@ -5,31 +5,45 @@
 
 .textarea {
   width: 80%;
-  height: 100px;
+  height: 50px;
   margin: 10px 0;
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
   resize: none;
+  background-color: #f1f0f0;
 }
 
 .button {
-  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: 0 auto;
   padding: 10px 20px;
   font-size: 16px;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
+}
+
+.sendButton,
+.saveButton,
+.backButton {
+  height: 40px;
+  width: 80px;
+  font-size: 20px;
+  border-radius: 10px;
   border: none;
 }
 
-.button:hover {
-  background-color: #0056b3;
+.sendButton {
+  background-color: #e2f72a;
 }
 
-.back {
-  margin-top: 20px;
+.saveButton {
+  background-color: darkorange;
+}
+
+.backButton {
+  background-color: rgb(234, 143, 250);
 }
 
 .history {
@@ -55,13 +69,13 @@
 
 .userMessage {
   text-align: left;
-  background-color: #f0f8ff; /* ユーザーのメッセージ背景 */
+  background-color: #f0f8ff;
   border: 1px solid #cce4ff;
 }
 
 .botMessage {
   text-align: left;
-  background-color: #e0ffe0; /* ボットのメッセージ背景 */
+  background-color: #e0ffe0;
   border: 1px solid #b2ffb2;
   margin-top: 10px;
 }
@@ -81,10 +95,9 @@
   cursor: not-allowed;
 }
 
-/* 会話部分だけスクロール */
 .scrollContainer {
-  max-height: 400px; /* スクロール可能な領域の高さ */
-  overflow-y: auto; /* 垂直方向にスクロールを有効にする */
+  max-height: 300px;
+  overflow-y: auto;
   margin-bottom: 20px;
   margin-top: 10px;
 }

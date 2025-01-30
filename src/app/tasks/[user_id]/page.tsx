@@ -8,15 +8,15 @@ import { Task } from "../../types";
 
 const Tasks = () => {
   const router = useRouter();
-  const { userId } = useParams();
+  const { user_id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
-  const tasksFromHook = useTasks((userId as string) || "");
+  const tasksFromHook = useTasks((user_id as string) || "");
 
   useEffect(() => {
-    if (userId && tasksFromHook.length > 0) {
+    if (user_id && tasksFromHook.length > 0) {
       setTasks(tasksFromHook);
     }
-  }, [userId, tasksFromHook]);
+  }, [user_id, tasksFromHook]);
 
   const sortedTasks = tasks.sort((a, b) => {
     const dateA = new Date(a.implementation_date);
@@ -29,8 +29,8 @@ const Tasks = () => {
   };
 
   const handleDelete = async () => {
-    if (userId) {
-      await daleteTask(userId as string);
+    if (user_id) {
+      await daleteTask(user_id as string);
     }
     router.back();
   };

@@ -8,29 +8,29 @@ import { FaRegCalendarCheck } from "react-icons/fa";
 import { VscSignOut } from "react-icons/vsc";
 import { UserIdData } from "@/app/types";
 
-const Menu: React.FC<UserIdData> = ({ userId }) => {
+const Menu: React.FC<UserIdData> = ({ user_id }) => {
   return (
     <div className={style.menu}>
       <div className={style.menu1}>
-        <Link className={style.link} href={`/analytics/${userId}`}>
+        <Link className={style.link} href={`/analytics/${user_id}`}>
           <FaRegCalendarCheck className={style.icon} />
           <span className={style.linkText}>進捗入力</span>
         </Link>
       </div>
       <div className={style.menu2}>
-        <Link className={style.link} href={`/tasks/${userId}`}>
+        <Link className={style.link} href={`/tasks/${user_id}`}>
           <FaTasks className={style.icon} />
           <span className={style.linkText}>タスク確認</span>
         </Link>
       </div>
       <div className={style.menu3}>
-        <Link className={style.link} href="/goals">
+        <Link className={style.link} href={`/goals/${user_id}`}>
           <IoChatboxEllipsesOutline className={style.icon} />
           <span className={style.linkText}>目標設定</span>
         </Link>
       </div>
       <div className={style.menu4}>
-        <Link className={style.link} href={`/setting/${userId}`}>
+        <Link className={style.link} href={`/setting/${user_id}`}>
           <IoIosSettings className={style.icon} />
           <span className={style.linkText}>設定</span>
         </Link>

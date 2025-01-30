@@ -20,8 +20,8 @@ export default function Home() {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const userId = user.uid;
-          const data = await userGoal(userId);
+          const user_id = user.uid;
+          const data = await userGoal(user_id);
           setUserData(data);
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -57,7 +57,7 @@ export default function Home() {
       <Target
         goal={userData.goal}
         daily={userData.duration}
-        userId={userData.user_id}
+        user_id={userData.user_id}
       />
       <div className={styles.carouselContainer}>
         <div
@@ -68,10 +68,10 @@ export default function Home() {
           }}
         >
           <div className={styles.carouselItem}>
-            <PieGraph userId={userData.user_id} />
+            <PieGraph user_id={userData.user_id} />
           </div>
           <div className={styles.carouselItem}>
-            <BarGraph userId={userData.user_id} />
+            <BarGraph user_id={userData.user_id} />
           </div>
         </div>
         <div className={styles.navigationButtons}>
@@ -89,7 +89,7 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <Menu userId={userData.user_id} />
+      <Menu user_id={userData.user_id} />
     </div>
   );
 }

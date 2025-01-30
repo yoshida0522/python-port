@@ -34,7 +34,13 @@
 }
 
 .backButton {
+  height: 40px;
+  width: 80px;
   margin: 30px auto;
+  font-size: 20px;
+  background-color: rgb(234, 143, 250);
+  border: none;
+  border-radius: 10px;
 }
 
 .hearing {

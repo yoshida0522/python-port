@@ -6,7 +6,7 @@ import { userGoal } from "../../api/userGoal";
 
 const Setting = () => {
   const router = useRouter();
-  const { userId } = useParams();
+  const { user_id } = useParams();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -19,13 +19,13 @@ const Setting = () => {
   });
 
   useEffect(() => {
-    const resolvedUserId = Array.isArray(userId) ? userId[0] : userId;
+    const resolvedUserId = Array.isArray(user_id) ? user_id[0] : user_id;
     if (resolvedUserId) {
       userGoal(resolvedUserId)
         .then((data) => setUserData(data))
         .catch((error) => console.error("Error fetching user data:", error));
     }
-  }, [userId]);
+  }, [user_id]);
 
   const handleBack = () => {
     router.back();

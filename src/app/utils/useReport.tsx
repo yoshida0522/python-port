@@ -71,16 +71,13 @@ const useReport = (userId: string, filteredTasks: Task[]) => {
       };
 
       try {
-        const response = await fetch(
-          `http://localhost:8000/tasks/${task.task_id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedTask),
-          }
-        );
+        const response = await fetch(`${BASE_URL}/tasks/${task.task_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedTask),
+        });
 
         if (!response.ok) {
           throw new Error(`Failed to update task with ID: ${task.task_id}`);
