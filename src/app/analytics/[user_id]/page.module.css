@@ -68,3 +68,10 @@
 .analyticsComment {
   margin: 0 auto;
 }
+
+@media screen and (max-width: 450px) {
+  .back,
+  .report {
+    width: 120px;
+  }
+}

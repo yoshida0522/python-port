@@ -57,3 +57,10 @@
 .taskComment {
   margin: 0 auto;
 }
+
+@media screen and (max-width: 450px) {
+  .back,
+  .delete {
+    width: 120px;
+  }
+}

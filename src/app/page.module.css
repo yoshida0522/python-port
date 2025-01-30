@@ -75,3 +75,6 @@
   background-color: #2a56c6;
   transform: scale(0.95);
 }
+
+@media screen and (max-width: 450px) {
+}

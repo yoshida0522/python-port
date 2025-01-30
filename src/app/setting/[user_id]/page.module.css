@@ -84,7 +84,6 @@
   }
 
   .hearingInput {
-    display: block;
-    margin-left: 10px;
+    width: 150px;
   }
 }
