@@ -32,11 +32,8 @@ const Goals = () => {
         approach,
       };
       try {
-        const result = await saveToDatabase(dbData);
-        console.log("データベース保存結果:", result);
-
+        await saveToDatabase(dbData);
         const workflowResult = await executeWorkflow(dbData);
-        console.log("ワークフロー実行結果:", workflowResult);
 
         if (!workflowResult) {
           console.error("ワークフロー実行結果が null です");
@@ -48,7 +45,7 @@ const Goals = () => {
         setIsSaving(false);
       }
     } else {
-      console.log("必要なデータが不足しています");
+      console.error("必要なデータが不足しています");
     }
     router.push("/");
   };
@@ -82,8 +79,6 @@ const Goals = () => {
         >
           保存
         </button>
-        {/* </div>
-      <div className={style.back}> */}
         <button className={style.backButton} onClick={handleBack}>
           戻る
         </button>

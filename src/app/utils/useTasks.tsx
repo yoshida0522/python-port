@@ -1,24 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Task } from "../types";
+import axios from "axios";
 
 const useTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/tasks?user_id=${userId}`);
-        const data: Task[] = await response.json();
-
-        if (!Array.isArray(data)) {
+        const response = await axios.get(`${BASE_URL}/tasks?user_id=${userId}`);
+        if (!Array.isArray(response.data)) {
           setTasks([]);
           return;
         }
 
-        const filteredTasks = data.filter(
+        const filteredTasks = response.data.filter(
           (task) => task.user_id === userId && !task.completed
         );
 

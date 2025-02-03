@@ -3,24 +3,11 @@ import { TaskObj, WorkflowInput } from "../types";
 import useSaveTask from "./useSaveTask";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "../firebase";
+import axios from "axios";
 
-// const formatToLocalDate = () => {
-//   try {
-//     const now = new Date();
-//     console.log("生成された現在の日付:", now);
-//     return now.toISOString().split("T")[0];
-//   } catch (error) {
-//     console.warn("日付フォーマットエラー:", error);
-//     const fallbackDate = new Date();
-//     console.log("フォールバック日付:", fallbackDate);
-//     return fallbackDate.toISOString().split("T")[0];
-//   }
-// };
 const formatToLocalDate = (): string => {
   try {
     const now = new Date();
-    console.log("生成された現在の日付 (ローカル):", now.toLocaleString());
-
     const localDate = now.toLocaleDateString("ja-JP", {
       year: "numeric",
       month: "2-digit",
@@ -33,11 +20,6 @@ const formatToLocalDate = (): string => {
     console.warn("日付フォーマットエラー:", error);
 
     const fallbackDate = new Date();
-    console.log(
-      "フォールバック日付 (ローカル):",
-      fallbackDate.toLocaleString()
-    );
-
     const fallbackLocalDate = fallbackDate.toLocaleDateString("ja-JP", {
       year: "numeric",
       month: "2-digit",
@@ -46,8 +28,6 @@ const formatToLocalDate = (): string => {
     return fallbackLocalDate.replace(/\//g, "-");
   }
 };
-
-console.log("ローカルタイムゾーンの日付:", formatToLocalDate());
 
 const useCreateGoal = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -62,7 +42,7 @@ const useCreateGoal = () => {
         setUserId(user.uid);
       } else {
         setUserId(null);
-        console.log("ユーザーが認証されていません");
+        console.error("ユーザーが認証されていません");
       }
     });
 
@@ -88,36 +68,18 @@ const useCreateGoal = () => {
 
       const todayDate = new Date().toISOString().split("T")[0];
       const updatedDbData = { ...dbData, today: todayDate };
+      const response = await axios.post(
+        "https://api.dify.ai/v1/workflows/run",
+        { inputs: updatedDbData, user: userId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+        }
+      );
 
-      console.log("送信するデータ:", {
-        inputs: updatedDbData,
-        user: userId,
-      });
-
-      const response = await fetch("https://api.dify.ai/v1/workflows/run", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          inputs: updatedDbData,
-          user: userId,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("APIエラーレスポンス:", errorData);
-        throw new Error(
-          errorData.message || errorData.detail || "リクエストに失敗しました"
-        );
-      }
-
-      const result = await response.json();
-      console.log("APIレスポンス:", result);
-
-      const answer = result?.data?.outputs?.answer;
+      const answer = response.data?.data?.outputs?.answer;
       if (!answer) throw new Error("outputsが不正です");
 
       const tasks = parseAnswerToTasks(answer);
@@ -127,7 +89,7 @@ const useCreateGoal = () => {
       return answer;
     } catch (error: unknown) {
       const errorMessage =
-        error instanceof Error ? error.message : "未知のエラーが発生しました";
+        error instanceof Error ? error.message : "エラーが発生しました";
       console.error(errorMessage);
       setWorkflowError(errorMessage);
 

@@ -56,6 +56,11 @@
   border-radius: 10px;
 }
 
+.back,
+.report:hover {
+  cursor: pointer;
+}
+
 .back {
   background-color: rgb(234, 143, 250);
 }

@@ -43,6 +43,10 @@
   border-radius: 10px;
 }
 
+.backButton:hover {
+  cursor: pointer;
+}
+
 .hearing {
   display: flex;
   justify-content: center;

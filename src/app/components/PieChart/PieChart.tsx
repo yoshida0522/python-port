@@ -12,6 +12,7 @@ import {
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import confetti from "canvas-confetti";
 import { UserIdData } from "@/app/types";
+import axios from "axios";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -25,12 +26,10 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
     if (user_id) {
       const fetchTasks = async () => {
         try {
-          const response = await fetch(`${BASE_URL}/tasks/${user_id}`, {
-            method: "GET",
-          });
-          const data = await response.json();
-
-          const tasks = Array.isArray(data) ? data : data.tasks || [];
+          const response = await axios.get(`${BASE_URL}/tasks/${user_id}`);
+          const tasks = Array.isArray(response.data)
+            ? response.data
+            : response.data.tasks || [];
           const totalTasks = tasks.length;
           const incompleteTasks = tasks.filter(
             (task: { completed: boolean }) => !task.completed

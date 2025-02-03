@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   BarController,
   BarElement,
@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
+import axios from "axios";
 
 const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -17,7 +18,7 @@ const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
     achievements: [],
   });
   const [error, setError] = useState<string | null>(null);
-  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   Chart.register(BarController, BarElement, CategoryScale, LinearScale);
 
@@ -25,13 +26,8 @@ const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
     if (user_id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`${BASE_URL}/graph/${user_id}`);
-          if (!response.ok) {
-            throw new Error(`Error fetching data: ${response.status}`);
-          }
-
-          const result: GraphDataResponse[] = await response.json();
-          console.log("取得データ:", result);
+          const response = await axios.get(`${BASE_URL}/graph/${user_id}`);
+          const result: GraphDataResponse[] = await response.data;
 
           if (result.length > 0) {
             const dates = result.map((item) => item.task_date);

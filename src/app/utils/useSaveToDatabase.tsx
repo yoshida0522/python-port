@@ -1,3 +1,4 @@
+import axios from "axios";
 import { auth } from "../firebase";
 
 const useSaveToDatabase = () => {
@@ -16,9 +17,6 @@ const useSaveToDatabase = () => {
         throw new Error("ユーザーIDが取得できませんでした");
       }
 
-      console.log("既存データを確認中: user_id =", user_Id);
-      console.log("受け取ったデータ:", data);
-
       const currentDate = new Date().toISOString().split("T")[0];
 
       const requestData = {
@@ -27,66 +25,30 @@ const useSaveToDatabase = () => {
         date: currentDate,
       };
 
-      const checkResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
-        method: "GET",
+      const checkResponse = await axios.get(`${BASE_URL}/goals/${user_Id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      if (!checkResponse.ok) {
-        throw new Error("データベース確認中にエラーが発生しました");
-      }
-
-      const existingData = await checkResponse.json();
-      console.log("取得した既存データ:", existingData);
-
       if (
-        existingData.some(
+        checkResponse.data.some(
           (item: { user_id: string }) => item.user_id === user_Id
         )
       ) {
-        console.log("一致するuser_idが見つかりました。データを更新します。");
-
-        const updateResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
-          method: "PUT",
+        await axios.put(`${BASE_URL}/goals/${user_Id}`, requestData, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestData),
         });
-
-        if (!updateResponse.ok) {
-          const errorDetails = await updateResponse.json();
-          console.error("エラー詳細:", errorDetails);
-          throw new Error("データ更新中にエラーが発生しました");
-        }
-
-        console.log("データが正常に更新されました");
         return;
       }
 
-      console.log(
-        "一致するuser_idは見つかりませんでした。新しいデータを追加します。"
-      );
-
-      const insertResponse = await fetch(`${BASE_URL}/goals/${user_Id}`, {
-        method: "POST",
+      await axios.post(`${BASE_URL}/goals/${user_Id}`, requestData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
       });
-
-      console.log("送信するデータ:", requestData);
-
-      if (!insertResponse.ok) {
-        const errorDetails = await insertResponse.json();
-        console.error("エラー詳細:", errorDetails);
-        throw new Error("データ追加中にエラーが発生しました");
-      }
-
-      console.log("新しいデータが正常に追加されました");
     } catch (error) {
       console.error("saveToDatabase実行中にエラーが発生しました:", error);
       throw error;

@@ -44,6 +44,11 @@
   border: none;
 }
 
+.back,
+.delete:hover {
+  cursor: pointer;
+}
+
 .back {
   margin-top: 30px;
   background-color: rgb(234, 143, 250);

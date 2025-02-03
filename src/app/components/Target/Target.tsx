@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import style from "./page.module.css";
 import { TargetProps, Task } from "@/app/types";
+import axios from "axios";
 
 const Target: React.FC<TargetProps> = ({ goal, daily, user_id }) => {
   const [remainingDays, setRemainingDays] = useState<number | null>(null);
@@ -28,18 +29,8 @@ const Target: React.FC<TargetProps> = ({ goal, daily, user_id }) => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/tasks/${user_id}`, {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          console.error("Failed to fetch data:", response.statusText);
-          return;
-        }
-
-        const result: Task[] = await response.json();
-        console.log("Fetched data:", result);
-
+        const response = await axios.get(`${BASE_URL}/tasks/${user_id}`);
+        const result: Task[] = await response.data;
         const days = calculateRemainingDays(result);
         setRemainingDays(days);
       } catch (error) {

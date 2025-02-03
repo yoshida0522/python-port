@@ -13,7 +13,6 @@ const SignOut: React.FC = () => {
       const auth = getAuth(firebaseApp);
       try {
         await signOut(auth);
-        console.log("Signed out successfully");
         router.push("/");
       } catch (error: unknown) {
         if (error instanceof Error) {

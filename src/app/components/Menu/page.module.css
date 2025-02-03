@@ -99,4 +99,8 @@
   .link {
     margin: 0 auto;
   }
+
+  .link {
+    width: 250px;
+  }
 }

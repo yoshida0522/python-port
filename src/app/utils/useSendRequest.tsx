@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HistoryEntry, UseSendRequestReturn } from "../types";
+import axios from "axios";
 
 const apiKey = process.env.NEXT_PUBLIC_DIFY_API_KEY;
 const endpointURL = "https://api.dify.ai/v1/chat-messages";
@@ -34,26 +35,18 @@ const useSendRequest = (): UseSendRequestReturn => {
     };
 
     try {
-      const response = await fetch(endpointURL, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json();
+      const response = await axios.post(endpointURL, payload, { headers });
 
       if (!conversationId) {
-        setConversationId(data.conversation_id);
+        setConversationId(response.data.conversation_id);
       }
 
       setHistory((prevHistory) => {
         const updatedHistory = [
           ...prevHistory,
-          { question, answer: data.answer },
+          { question, answer: response.data.answer },
         ];
-        const questions = updatedHistory.map((entry) => entry.question);
-        console.log("Questions in history:", questions);
-
+        updatedHistory.map((entry) => entry.question);
         return updatedHistory;
       });
 

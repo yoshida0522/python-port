@@ -1,18 +1,19 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./page.module.css";
 import useDayTasks from "../../utils/useDayTask";
 import useReport from "../../utils/useReport";
 import { userGoal } from "../../api/userGoal";
 import { Task } from "../../types";
 import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
 
 const Analytics = () => {
   const router = useRouter();
   const { user_id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const tasksFromHook = useDayTasks((user_id as string) || "");
-  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (user_id) {
@@ -25,14 +26,7 @@ const Analytics = () => {
             setTasks(tasksFromHook);
           }
 
-          // graphデータを取得
-          const response = await fetch(`${BASE_URL}/graph/${user_id}`);
-          if (!response.ok) {
-            throw new Error("Failed to fetch graph data");
-          }
-          const graphData = await response.json();
-          console.log("Graph Data:", graphData);
-          // ここで graphData を適切に使いたい場合は、setTasks や他の状態に追加する
+          await axios.get(`${BASE_URL}/graph/${user_id}`);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -74,17 +68,11 @@ const Analytics = () => {
         completed: !taskToUpdate.completed,
       };
 
-      const response = await fetch(`${BASE_URL}/tasks/${task_Id}`, {
-        method: "PUT",
+      await axios.put(`${BASE_URL}/tasks/${task_Id}`, updatedTask, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedTask),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to update task");
-      }
 
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
