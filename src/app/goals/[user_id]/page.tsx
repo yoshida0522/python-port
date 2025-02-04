@@ -17,35 +17,40 @@ const Goals = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    if (user_id) {
-      await daleteTask(user_id as string);
-    }
-    const [goal, duration, daily_time, level, approach] = history.map(
-      (entry) => entry.question
-    );
-    if (goal && duration && daily_time && level && approach) {
-      const dbData = {
-        goal,
-        duration,
-        daily_time,
-        level,
-        approach,
-      };
-      try {
-        await saveToDatabase(dbData);
-        const workflowResult = await executeWorkflow(dbData);
+    const confirmation = window.confirm("目標設定をしてもよろしいですか？");
+    if (confirmation) {
+      if (user_id) {
+        await daleteTask(user_id as string);
+      }
+      const [goal, duration, daily_time, level, approach] = history.map(
+        (entry) => entry.question
+      );
+      if (goal && duration && daily_time && level && approach) {
+        const dbData = {
+          goal,
+          duration,
+          daily_time,
+          level,
+          approach,
+        };
+        try {
+          await saveToDatabase(dbData);
+          const workflowResult = await executeWorkflow(dbData);
 
-        if (!workflowResult) {
-          console.error("ワークフロー実行結果が null です");
-          return;
+          if (!workflowResult) {
+            console.error("ワークフロー実行結果が null です");
+            return;
+          }
+        } catch (error) {
+          console.error("エラーが発生しました:", error);
+        } finally {
+          setIsSaving(false);
         }
-      } catch (error) {
-        console.error("エラーが発生しました:", error);
-      } finally {
-        setIsSaving(false);
+      } else {
+        console.error("必要なデータが不足しています");
       }
     } else {
-      console.error("必要なデータが不足しています");
+      return;
     }
     router.push("/");
   };

@@ -29,8 +29,13 @@ const Tasks = () => {
   };
 
   const handleDelete = async () => {
-    if (user_id) {
-      await daleteTask(user_id as string);
+    const confirmation = window.confirm("全件削除してもよろしいですか？");
+    if (confirmation) {
+      if (user_id) {
+        await daleteTask(user_id as string);
+      }
+    } else {
+      return;
     }
     router.back();
   };
