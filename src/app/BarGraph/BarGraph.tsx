@@ -112,7 +112,7 @@ const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
       ) : graphData.dates.length === 0 ? (
         <p>データがありません。</p>
       ) : (
-        <canvas ref={canvasRef} width="420" height="300"></canvas>
+        <canvas ref={canvasRef} width="420" height="290"></canvas>
       )}
     </div>
   );

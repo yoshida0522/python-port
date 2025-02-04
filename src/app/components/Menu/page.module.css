@@ -1,63 +1,46 @@
 .menu {
   max-width: 500px;
-  margin: 20px auto;
+  margin: 0 auto;
   display: flex;
   justify-content: space-around;
 }
 
-.menu1 {
+.menu1,
+.menu2,
+.menu3,
+.menu4,
+.menu5 {
   border-radius: 10px;
-  background-color: turquoise;
   width: 100px;
   height: 50px;
 }
 
-.menu1:hover {
+.menu1:hover,
+.menu2:hover,
+.menu3:hover,
+.menu4:hover,
+.menu5:hover {
   cursor: pointer;
+}
+
+.menu1 {
+  background-color: turquoise;
 }
 
 .menu2 {
-  border-radius: 10px;
   background-color: antiquewhite;
-  width: 100px;
-  height: 50px;
-}
-
-.menu2:hover {
-  cursor: pointer;
 }
 
 .menu3 {
-  border-radius: 10px;
   background-color: rgb(180, 198, 247);
-  width: 100px;
-  height: 50px;
-}
-
-.menu3:hover {
-  cursor: pointer;
 }
 
 .menu4 {
-  border-radius: 10px;
   background-color: lightpink;
-  width: 100px;
-  height: 50px;
-}
-
-.menu4:hover {
-  cursor: pointer;
 }
 
 .menu5 {
-  border-radius: 10px;
   background-color: rgb(244, 246, 197);
-  width: 100px;
-  height: 50px;
-}
-
-.menu5:hover {
-  cursor: pointer;
 }
 
 .link {
@@ -84,6 +67,8 @@
 @media screen and (max-width: 450px) {
   .menu {
     display: block;
+    position: relative;
+    top: -70px;
   }
 
   .menu1,
