@@ -10,7 +10,7 @@ import {
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
 import axios from "axios";
-import { achievementChartData } from "../lib/achievementChartData";
+import { achievementChartData } from "../libs/achievementChartData";
 
 const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -67,7 +67,7 @@ const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
       {error ? (
         <p>{error}</p>
       ) : graphData.dates.length === 0 ? (
-        <p>データがありません。</p>
+        <p className={style.comment}>データがありません。</p>
       ) : (
         <canvas ref={canvasRef} width="420" height="290"></canvas>
       )}

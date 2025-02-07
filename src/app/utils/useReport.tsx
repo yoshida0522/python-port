@@ -33,7 +33,9 @@ const useReport = (userId: string, filteredTasks: Task[]) => {
       filteredTasks,
     };
 
-    const confirmation = window.confirm("進捗報告してもよろしいですか？");
+    const confirmation = window.confirm(
+      "一度報告をすると翌日まで編集できなくなります。\r\n\r\n進捗報告してもよろしいですか？"
+    );
     if (confirmation) {
       try {
         await axios.post(`${BASE_URL}/graph/${userId}`, reportData, {

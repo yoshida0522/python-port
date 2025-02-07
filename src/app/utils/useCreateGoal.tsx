@@ -4,7 +4,7 @@ import useSaveTask from "./useSaveTask";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "../firebase";
 import axios from "axios";
-import { parseAnswerToTasks } from "../lib/parseAnswerToTasks";
+import { parseAnswerToTasks } from "../libs/parseAnswerToTasks";
 
 const useCreateGoal = () => {
   const [userId, setUserId] = useState<string | null>(null);

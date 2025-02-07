@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useTasks from "../../utils/useTasks";
-import daleteTask from "../../utils/useTaskDelete";
+import deleteTask from "../../utils/useTaskDelete";
 import { Task } from "../../types";
 
 const Tasks = () => {
@@ -29,10 +29,12 @@ const Tasks = () => {
   };
 
   const handleDelete = async () => {
-    const confirmation = window.confirm("全件削除してもよろしいですか？");
+    const confirmation = window.confirm(
+      "タスクとグラフがリセットされます。\r\n一度削除されると元に戻せません。\r\n\r\n全件削除してもよろしいですか？"
+    );
     if (confirmation) {
       if (user_id) {
-        await daleteTask(user_id as string);
+        await deleteTask(user_id as string);
       }
     } else {
       return;

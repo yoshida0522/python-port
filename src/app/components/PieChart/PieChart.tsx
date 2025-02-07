@@ -6,7 +6,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import confetti from "canvas-confetti";
 import { UserIdData } from "@/app/types";
 import axios from "axios";
-import { calculateChartData, chartOptions } from "@/app/lib/chartUtils";
+import { calculateChartData, chartOptions } from "@/app/libs/chartUtils";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
