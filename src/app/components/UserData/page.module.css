@@ -1,0 +1,61 @@
+.title {
+  margin: 50px auto;
+}
+
+.userForm {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: center;
+  margin: 0 auto;
+  background-color: rgb(244, 243, 243);
+}
+
+.user {
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+.userInput {
+  width: 250px;
+}
+
+.nameLabel {
+  margin-right: 52px;
+}
+
+.idLabel {
+  margin-right: 114px;
+}
+
+.mailLabel {
+  margin-right: 20px;
+}
+
+.backButton {
+  height: 40px;
+  width: 80px;
+  margin: 30px auto;
+  font-size: 20px;
+  background-color: rgb(234, 143, 250);
+  border: none;
+  border-radius: 10px;
+}
+
+.backButton:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+  .nameLabel,
+  .idLabel,
+  .mailLabel {
+    display: block;
+    margin: 5px auto;
+  }
+
+  .userInput {
+    margin-left: 15px;
+  }
+}

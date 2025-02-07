@@ -77,13 +77,13 @@
   text-align: left;
   background-color: #f0f8ff;
   border: 1px solid #cce4ff;
+  margin-top: 10px;
 }
 
 .botMessage {
   text-align: left;
   background-color: #e0ffe0;
   border: 1px solid #b2ffb2;
-  margin-top: 10px;
 }
 
 .h2 {

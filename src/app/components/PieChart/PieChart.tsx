@@ -1,18 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import style from "./page.module.css";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartData,
-  ChartOptions,
-} from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import confetti from "canvas-confetti";
 import { UserIdData } from "@/app/types";
 import axios from "axios";
+import { calculateChartData, chartOptions } from "@/app/lib/chartUtils";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -20,7 +14,7 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
   const [progress, setProgress] = useState(0);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const BASE_URL = useMemo(() => process.env.NEXT_PUBLIC_API_URL, []);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (user_id) {
@@ -39,6 +33,13 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
               ? ((totalTasks - incompleteTasks) / totalTasks) * 100
               : 0;
 
+          const tasksString = JSON.stringify(tasks);
+          const storedTasks = localStorage.getItem("prevTasks");
+          if (tasksString !== storedTasks) {
+            localStorage.setItem("prevTasks", tasksString); // タスクを保存
+            localStorage.removeItem("confettiFired"); // **発火フラグをリセット**
+          }
+
           setTotal(totalTasks);
           setProgress(completionPercentage);
         } catch (error) {
@@ -53,7 +54,9 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
   }, [user_id, BASE_URL]);
 
   useEffect(() => {
-    if (progress === 100) {
+    const hasFired = localStorage.getItem("confettiFired");
+
+    if (progress === 100 && !hasFired) {
       confetti({
         particleCount: 150,
         spread: 70,
@@ -69,43 +72,11 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
           colors: ["#ff0", "#ff6347", "#87ceeb", "#32cd32"],
         });
       }, 1000);
+      localStorage.setItem("confettiFired", "true");
     }
   }, [progress]);
 
-  const percentage = total > 0 ? Math.min(progress, 100) : 0;
-  const remainingPercentage = 100 - percentage;
-
-  const chartData: ChartData<"pie"> = {
-    datasets: [
-      {
-        data: [percentage, remainingPercentage],
-        backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const options: ChartOptions<"pie"> = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
-      datalabels: {
-        display: true,
-        align: "center",
-        anchor: "center",
-        font: {
-          weight: "bold",
-          size: 18,
-        },
-        formatter: (value: number, context: { dataIndex: number }) => {
-          const label = context.dataIndex === 0 ? "達成率" : "残り";
-          return `${label}\n ${Math.round(value)}%`;
-        },
-      },
-    },
-  };
+  const chartData = calculateChartData(progress, total);
 
   return (
     <div className={style.graphSize}>
@@ -116,7 +87,7 @@ const ProgressPieChart: React.FC<UserIdData> = ({ user_id }) => {
           <p className={style.comment}>データがありません</p>
         </div>
       ) : (
-        <Pie data={chartData} options={options} />
+        <Pie data={chartData} options={chartOptions} />
       )}
     </div>
   );

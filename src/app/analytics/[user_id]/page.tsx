@@ -7,6 +7,7 @@ import { userGoal } from "../../api/userGoal";
 import { Task } from "../../types";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import useHandleTaskClick from "@/app/utils/useHandleTaskClick";
 
 const Analytics = () => {
   const router = useRouter();
@@ -15,9 +16,9 @@ const Analytics = () => {
   const [graphCheck, setGraphCheck] = useState(false);
   const tasksFromHook = useDayTasks((user_id as string) || "");
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-  const today = new Date();
-  const japanToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
-  const formattedToday = japanToday.toISOString().split("T")[0];
+  const formattedToday = new Date(Date.now() + 9 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
 
   useEffect(() => {
     if (user_id) {
@@ -39,7 +40,6 @@ const Analytics = () => {
           if (todayTasks.length > 0) {
             setGraphCheck(true);
           }
-          console.log("今日のタスクデータ:", todayTasks);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -65,37 +65,7 @@ const Analytics = () => {
     router.back();
   };
 
-  const handleTaskClick = async (task_Id: string) => {
-    if (graphCheck === !true) {
-      try {
-        const taskToUpdate = tasks.find((task) => task.task_id === task_Id);
-        if (!taskToUpdate) {
-          throw new Error("Task not found");
-        }
-
-        const updatedTask = {
-          ...taskToUpdate,
-          completed: !taskToUpdate.completed,
-        };
-
-        await axios.put(`${BASE_URL}/tasks/${task_Id}`, updatedTask, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.task_id === task_Id
-              ? { ...task, completed: !task.completed }
-              : task
-          )
-        );
-      } catch (error) {
-        console.error("Error updating task:", error);
-      }
-    }
-  };
+  const handleTaskClick = useHandleTaskClick(tasks, setTasks, graphCheck);
 
   return (
     <div className={style.taskList}>
@@ -123,7 +93,7 @@ const Analytics = () => {
         <button className={style.back} onClick={handleBack}>
           戻る
         </button>
-        {!graphCheck && (
+        {filteredTasks.length > 0 && !graphCheck && (
           <button className={style.report} onClick={handleReportLogic}>
             進捗報告
           </button>

@@ -1,62 +1,29 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import style from "./page.module.css";
-import useSaveToDatabase from "../../utils/useSaveToDatabase";
 import useSendRequest from "../../utils/useSendRequest";
-import useCreateGoal from "../../utils/useCreateGoal";
+import useGoalHandleSave from "@/app/utils/useGoalHandleSave";
 import { useState } from "react";
-import daleteTask from "../../utils/useTaskDelete";
 
 const Goals = () => {
   const router = useRouter();
   const { user_id } = useParams();
-  const { saveToDatabase } = useSaveToDatabase();
   const { question, setQuestion, history, sendRequest, loading } =
     useSendRequest();
-  const { executeWorkflow, workflowLoading, workflowError } = useCreateGoal();
-  const [isSaving, setIsSaving] = useState(false);
-
-  const handleSave = async () => {
-    const confirmation = window.confirm("目標設定をしてもよろしいですか？");
-    if (confirmation) {
-      if (user_id) {
-        await daleteTask(user_id as string);
-      }
-      const [goal, duration, daily_time, level, approach] = history.map(
-        (entry) => entry.question
-      );
-      if (goal && duration && daily_time && level && approach) {
-        const dbData = {
-          goal,
-          duration,
-          daily_time,
-          level,
-          approach,
-        };
-        try {
-          await saveToDatabase(dbData);
-          const workflowResult = await executeWorkflow(dbData);
-
-          if (!workflowResult) {
-            console.error("ワークフロー実行結果が null です");
-            return;
-          }
-        } catch (error) {
-          console.error("エラーが発生しました:", error);
-        } finally {
-          setIsSaving(false);
-        }
-      } else {
-        console.error("必要なデータが不足しています");
-      }
-    } else {
-      return;
-    }
-    router.push("/");
-  };
+  const userId = Array.isArray(user_id) ? user_id[0] : user_id;
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
+  const { handleSave, isSaving, workflowLoading, workflowError } =
+    useGoalHandleSave(userId, history, router);
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setQuestion(e.target.value);
+    if (showPlaceholder) {
+      setShowPlaceholder(false);
+    }
   };
 
   return (
@@ -65,11 +32,13 @@ const Goals = () => {
       <textarea
         className={style.textarea}
         value={question}
-        onChange={(e) => {
-          setQuestion(e.target.value);
-        }}
+        placeholder={showPlaceholder ? "達成したい目標を入力してください" : ""}
+        onChange={handleTextareaChange}
       ></textarea>
       <div className={style.button}>
+        <button className={style.backButton} onClick={handleBack}>
+          戻る
+        </button>
         <button
           className={style.sendButton}
           onClick={sendRequest}
@@ -84,9 +53,6 @@ const Goals = () => {
         >
           保存
         </button>
-        <button className={style.backButton} onClick={handleBack}>
-          戻る
-        </button>
       </div>
       <h2>会話履歴</h2>
       {loading && <p className={style.loading}>生成中です...</p>}
@@ -96,16 +62,21 @@ const Goals = () => {
       )}
       <div className={style.scrollContainer}>
         <ul className={style.history}>
-          {history.map((entry, index) => (
-            <li key={index} className={style.message}>
-              <div className={style.userMessage}>
-                <strong>ユーザー:</strong> {entry.question}
-              </div>
-              <div className={style.botMessage}>
-                <strong>ボット:</strong> {entry.answer}
-              </div>
-            </li>
-          ))}
+          {history
+            .slice()
+            .reverse()
+            .map((entry, index) => (
+              <li key={index} className={style.message}>
+                <div className={style.botMessage}>
+                  <strong>ボット:</strong>
+                  <div style={{ whiteSpace: "pre-line" }}>{entry.answer}</div>
+                </div>
+                <div className={style.userMessage}>
+                  <strong>ユーザー:</strong>
+                  <div style={{ whiteSpace: "pre-line" }}>{entry.question}</div>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
       {workflowError && <p className={style.error}>エラー: {workflowError}</p>}

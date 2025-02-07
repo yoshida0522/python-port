@@ -10,6 +10,7 @@ import {
 import style from "./page.module.css";
 import { GraphData, GraphDataResponse, UserIdData } from "../types";
 import axios from "axios";
+import { achievementChartData } from "../lib/achievementChartData";
 
 const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -52,57 +53,13 @@ const BarGraph: React.FC<UserIdData> = ({ user_id }) => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) return;
 
-    const achievementChart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: graphData.dates,
-        datasets: [
-          {
-            label: "日別達成度",
-            data: graphData.achievements,
-            backgroundColor: "rgba(54, 162, 235, 0.6)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: "日付",
-            },
-          },
-          y: {
-            beginAtZero: true,
-            max: 100,
-            title: {
-              display: true,
-              text: "達成率 (%)",
-            },
-            ticks: {
-              callback: (value) => `${value}%`,
-            },
-          },
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: "top",
-          },
-          tooltip: {
-            callbacks: {
-              label: (context) => `達成度: ${context.raw}%`,
-            },
-          },
-        },
-      },
-    });
+    const achievementChart = achievementChartData(graphData, ctx);
 
-    return () => achievementChart.destroy();
+    if (achievementChart) {
+      return () => {
+        achievementChart.destroy();
+      };
+    }
   }, [graphData]);
 
   return (

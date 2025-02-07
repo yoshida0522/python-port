@@ -60,9 +60,11 @@ const Tasks = () => {
         <button onClick={handleBack} className={style.back}>
           戻る
         </button>
-        <button onClick={handleDelete} className={style.delete}>
-          全件削除
-        </button>
+        {sortedTasks.length > 0 && (
+          <button onClick={handleDelete} className={style.delete}>
+            全件削除
+          </button>
+        )}
       </div>
     </div>
   );

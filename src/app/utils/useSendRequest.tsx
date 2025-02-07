@@ -26,7 +26,7 @@ const useSendRequest = (): UseSendRequestReturn => {
           .map(
             (entry) => `ユーザー: ${entry.question}\nボット: ${entry.answer}`
           )
-          .join("\n"),
+          .join("\n\n"),
       },
       query: question,
       response_mode: "blocking",
@@ -46,7 +46,6 @@ const useSendRequest = (): UseSendRequestReturn => {
           ...prevHistory,
           { question, answer: response.data.answer },
         ];
-        updatedHistory.map((entry) => entry.question);
         return updatedHistory;
       });
 

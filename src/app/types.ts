@@ -30,6 +30,13 @@ export interface UserData {
   approach: string;
 }
 
+export interface UserInfo {
+  name: string;
+  email: string;
+  user_id: string;
+  handleBack: () => void;
+}
+
 export interface TargetProps {
   goal?: string;
   daily?: string;
@@ -81,4 +88,12 @@ export interface UserGoalData {
 
 export interface UserIdData {
   user_id: string;
+}
+
+export interface GoalDataProps {
+  goal: string;
+  duration: string;
+  daily_time: string;
+  level: string;
+  approach: string;
 }

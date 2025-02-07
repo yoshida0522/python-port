@@ -1,0 +1,33 @@
+.hearing {
+  display: flex;
+  justify-content: center;
+}
+
+.hearingForm {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.hearingGoal,
+.hearingDaily,
+.hearingTime,
+.hearingLevel,
+.hearingProcedure {
+  margin-right: 10px;
+}
+
+.hearingInput {
+  width: 300px;
+  margin-right: 50px;
+}
+
+@media screen and (max-width: 480px) {
+  .hearingInput {
+    width: 150px;
+  }
+}
