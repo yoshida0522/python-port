@@ -109,11 +109,42 @@
 }
 
 .loading {
+  color: rgb(249, 145, 145);
+  font-size: 20px;
   max-width: 80%;
   margin: 0 auto;
-  background-color: rgb(249, 145, 145);
 }
 
 .error {
   color: red;
+}
+
+@keyframes dotTyping {
+  0% {
+    content: "";
+  }
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60% {
+    content: "...";
+  }
+  80% {
+    content: "....";
+  }
+  100% {
+    content: ".....";
+  }
+}
+
+.loading {
+  display: inline-block;
+}
+
+.loading:after {
+  content: "";
+  animation: dotTyping 2s steps(1, end) infinite;
 }

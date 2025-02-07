@@ -9,6 +9,7 @@ const useSendRequest = (): UseSendRequestReturn => {
   const [conversationId, setConversationId] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const headers = {
     Authorization: `Bearer ${apiKey}`,
@@ -18,7 +19,15 @@ const useSendRequest = (): UseSendRequestReturn => {
   const sendRequest = async () => {
     if (!question) return;
 
+    const periodRegex = /(1[2-9]|[2-9]\d+)ヶ月|か月|カ月|年/;
+    if (periodRegex.test(question)) {
+      setError("12ヶ月未満で入力してください");
+      setQuestion("");
+      return;
+    }
+
     setLoading(true);
+    setError(null);
 
     const payload = {
       inputs: {
@@ -64,6 +73,7 @@ const useSendRequest = (): UseSendRequestReturn => {
     sendRequest,
     loading,
     conversationId,
+    error,
   };
 };
 

@@ -8,7 +8,7 @@ import { useState } from "react";
 const Goals = () => {
   const router = useRouter();
   const { user_id } = useParams();
-  const { question, setQuestion, history, sendRequest, loading } =
+  const { question, setQuestion, history, sendRequest, loading, error } =
     useSendRequest();
   const userId = Array.isArray(user_id) ? user_id[0] : user_id;
   const [showPlaceholder, setShowPlaceholder] = useState(true);
@@ -29,6 +29,7 @@ const Goals = () => {
   return (
     <div className={style.center}>
       <h1>ヒアリング</h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
       <textarea
         className={style.textarea}
         value={question}
@@ -55,11 +56,9 @@ const Goals = () => {
         </button>
       </div>
       <h2>会話履歴</h2>
-      {loading && <p className={style.loading}>生成中です...</p>}
-      {isSaving && <p className={style.loading}>保存中です...</p>}
-      {workflowLoading && (
-        <p className={style.loading}>ワークフローを実行中...</p>
-      )}
+      {loading && <p className={style.loading}>生成中です</p>}
+      {isSaving && <p className={style.loading}>保存中です</p>}
+      {workflowLoading && <p className={style.loading}>ワークフローを実行中</p>}
       <div className={style.scrollContainer}>
         <ul className={style.history}>
           {history

@@ -19,6 +19,7 @@ export interface UseSendRequestReturn {
   sendRequest: () => Promise<void>;
   loading: boolean;
   conversationId: string;
+  error: string | null;
 }
 
 export interface UserData {
