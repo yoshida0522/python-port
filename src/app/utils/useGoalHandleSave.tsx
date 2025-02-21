@@ -1,5 +1,5 @@
 import { useState } from "react";
-import daleteTask from "./useTaskDelete";
+import deleteTask from "./useTaskDelete";
 import useSaveToDatabase from "./useSaveToDatabase";
 import useCreateGoal from "./useCreateGoal";
 import { useRouter } from "next/navigation";
@@ -16,41 +16,41 @@ const useGoalHandleSave = (
 
   const handleSave = async () => {
     const confirmation = window.confirm("目標設定をしてもよろしいですか？");
-    if (confirmation) {
+    if (!confirmation) return;
+
+    try {
       if (userId) {
-        await daleteTask(userId as string);
+        await deleteTask(userId);
       }
+
       const [goal, duration, daily_time, level, approach] = history.map(
         (entry) => entry.question
       );
-      if (goal && duration && daily_time && level && approach) {
-        const dbData = {
-          goal,
-          duration,
-          daily_time,
-          level,
-          approach,
-        };
-        try {
-          await saveToDatabase(dbData);
-          const workflowResult = await executeWorkflow(dbData);
 
-          if (!workflowResult) {
-            console.error("ワークフロー実行結果が null です");
-            return;
-          }
-        } catch (error) {
-          console.error("エラーが発生しました:", error);
-        } finally {
-          setIsSaving(false);
-        }
-      } else {
+      if (!(goal && duration && daily_time && level && approach)) {
         console.error("必要なデータが不足しています");
+        return;
       }
-    } else {
-      return;
+
+      const dbData = { goal, duration, daily_time, level, approach };
+
+      await saveToDatabase(dbData);
+      const workflowResult = await executeWorkflow(dbData);
+
+      if (!workflowResult) {
+        console.error("ワークフロー実行結果が null です");
+        return;
+      }
+
+      router.push("/");
+    } catch (error) {
+      console.error("handleSave 実行中にエラーが発生しました:", error);
+      if (error instanceof Error) {
+        console.error("エラーメッセージ:", error.message);
+      }
+    } finally {
+      setIsSaving(false);
     }
-    router.push("/");
   };
 
   return {

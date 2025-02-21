@@ -3,7 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useSendRequest from "../../utils/useSendRequest";
 import useGoalHandleSave from "@/app/utils/useGoalHandleSave";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Goals = () => {
   const router = useRouter();
@@ -14,6 +14,13 @@ const Goals = () => {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const { handleSave, isSaving, workflowLoading, workflowError } =
     useGoalHandleSave(userId, history, router);
+  const [isSaveEnabled, setIsSaveEnabled] = useState(false);
+  const [isSendDisabled, setIsSendDisabled] = useState(false);
+
+  useEffect(() => {
+    setIsSaveEnabled(history.length >= 5);
+    setIsSendDisabled(history.length >= 5);
+  }, [history.length]);
 
   const handleBack = () => {
     router.back();
@@ -43,14 +50,14 @@ const Goals = () => {
         <button
           className={style.sendButton}
           onClick={sendRequest}
-          disabled={loading}
+          disabled={loading || isSendDisabled}
         >
           送信
         </button>
         <button
           className={style.saveButton}
           onClick={handleSave}
-          disabled={loading || workflowLoading}
+          disabled={!isSaveEnabled || loading || workflowLoading}
         >
           保存
         </button>

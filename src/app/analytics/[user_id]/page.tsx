@@ -14,6 +14,7 @@ const Analytics = () => {
   const { user_id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [graphCheck, setGraphCheck] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const tasksFromHook = useDayTasks((user_id as string) || "");
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   const formattedToday = new Date(Date.now() + 9 * 60 * 60 * 1000)
@@ -23,10 +24,10 @@ const Analytics = () => {
   useEffect(() => {
     if (user_id) {
       const fetchData = async () => {
+        setIsLoading(true);
         try {
           const goalData = await userGoal(user_id as string);
           setTasks(goalData || []);
-
           if (tasksFromHook.length > 0) {
             setTasks(tasksFromHook);
           }
@@ -42,6 +43,8 @@ const Analytics = () => {
           }
         } catch (error) {
           console.error("Error fetching data:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -71,7 +74,9 @@ const Analytics = () => {
     <div className={style.taskList}>
       <h1>今日のタスク</h1>
       <div className={style.taskCardContainer}>
-        {filteredTasks.length > 0 ? (
+        {isLoading ? (
+          <p className={style.analyticsComment}>データの取得中です...</p>
+        ) : filteredTasks.length > 0 ? (
           filteredTasks.map((task) => (
             <div
               key={task.task_id}

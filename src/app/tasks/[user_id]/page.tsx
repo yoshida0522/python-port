@@ -4,18 +4,22 @@ import { useParams, useRouter } from "next/navigation";
 import style from "./page.module.css";
 import useTasks from "../../utils/useTasks";
 import deleteTask from "../../utils/useTaskDelete";
+import deleteGoal from "../../utils/useGoalDelete";
 import { Task } from "../../types";
 
 const Tasks = () => {
   const router = useRouter();
   const { user_id } = useParams();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const tasksFromHook = useTasks((user_id as string) || "");
 
   useEffect(() => {
+    setIsLoading(true);
     if (user_id && tasksFromHook.length > 0) {
       setTasks(tasksFromHook);
     }
+    setIsLoading(false);
   }, [user_id, tasksFromHook]);
 
   const sortedTasks = tasks.sort((a, b) => {
@@ -29,24 +33,27 @@ const Tasks = () => {
   };
 
   const handleDelete = async () => {
+    if (!user_id) return;
     const confirmation = window.confirm(
       "タスクとグラフがリセットされます。\r\n一度削除されると元に戻せません。\r\n\r\n全件削除してもよろしいですか？"
     );
-    if (confirmation) {
-      if (user_id) {
-        await deleteTask(user_id as string);
-      }
-    } else {
-      return;
+    if (!confirmation) return;
+    try {
+      await deleteTask(user_id as string);
+      await deleteGoal(user_id as string);
+      router.back();
+    } catch (error) {
+      console.error("削除に失敗しました", error);
     }
-    router.back();
   };
 
   return (
     <div className={style.taskList}>
       <h1>タスク一覧</h1>
       <div className={style.taskCardContainer}>
-        {sortedTasks.length > 0 ? (
+        {isLoading ? (
+          <p className={style.taskComment}>データの取得中です...</p>
+        ) : sortedTasks.length > 0 ? (
           sortedTasks.map((task) => (
             <div key={task.task_id} className={style.taskCard}>
               <h3>{task.title}</h3>

@@ -6,16 +6,22 @@ const useTaskDelete = async (userId: string) => {
     const response = await axios.delete(`${BASE_URL}/all-tasks/${userId}`);
     if (response.status === 200) {
     } else {
-      console.error("タスクの削除に失敗しました。");
+      throw new Error(
+        `タスクの削除に失敗しました (status: ${response.status})`
+      );
     }
 
     const graphResponse = await axios.delete(`${BASE_URL}/graph/${userId}`);
+
     if (graphResponse.status === 200) {
     } else {
-      console.error("Graphデータの削除に失敗しました。");
+      throw new Error(
+        `Graphデータの削除に失敗しました (status: ${graphResponse.status})`
+      );
     }
   } catch (error) {
     console.error("エラーが発生しました:", error);
+    throw error;
   }
 };
 

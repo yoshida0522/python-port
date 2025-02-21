@@ -44,6 +44,7 @@ const useSaveToDatabase = () => {
         return;
       }
 
+      console.log("送信データ:", requestData);
       await axios.post(`${BASE_URL}/goals/${user_Id}`, requestData, {
         headers: {
           "Content-Type": "application/json",
