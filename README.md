@@ -1,37 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+目標達成アプリ
 
-## Getting Started
+アプリ URL<br>
+https://
 
-First, run the development server:
+アプリについて<br>
+生成 AI を用いた目標達成アプリです。<br>
+達成したい目標を入力するだけで、タスクを自動生成します。<br>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+【 ログイン画面 】<br>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+【 メイン画面 】<br>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+【 進捗入力画面 】<br>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+【 タスク確認画面 】<br>
 
-## Learn More
+【 目標設定画面 】<br>
 
-To learn more about Next.js, take a look at the following resources:
+【 設定画面 】<br>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+使用技術<br>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+【フロントエンド】
+*HTML<br>
+*CSS<br>
+*TypeScript<br>
+*Next.js(React)<br>
 
-## Deploy on Vercel
+【バックエンド】
+*Python<br>
+*MongoDB<br>
+*FastAPI<br>
+*Firebase<br>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+【バージョン管理】
+\*GitHub<br>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# python-port
+【デプロイ】
+\*Vercel<br>
+
+【API】
+*Dify(チャットボット API)<br>
+*Dify(ワークフロー API)<br> \*チャット GPT(オープン AI)<br>
+
+【環境変数】
