@@ -2,23 +2,25 @@
 
 ## アプリ URL
 
-https://
+https://python-port.vercel.app
 
 ## アプリについて
 
 生成 AI を用いた目標達成アプリです。<br>
-達成したい目標を入力するだけで、タスクを自動生成します。<br>
+達成したい目標を入力すると、目標に応じたタスクを自動生成します。<br>
 
 ### 【 ログイン画面 】
 
-Google のアカウントでログインします。
+Google アカウントでログインできます。
 ![Image](https://github.com/user-attachments/assets/18012148-6631-4092-9f18-d98b0a96c512)<br>
 <br>
 
 ### 【 メイン画面 】
 
-目標設定をしていない場合は下記のような画面になります。
+登録した目標や進捗状況の概要を確認できるダッシュボードです。<br>
+目標が未設定の場合は、下記のような画面になります。
 ![Image](https://github.com/user-attachments/assets/f81b33b1-3f81-451f-a727-6c66cc5aa4bc)<br>
+<br>
 <br>
 
 目標設定が終わっている場合は、中央に円グラフが表示されます。
@@ -36,10 +38,13 @@ Google のアカウントでログインします。
 
 ![Image](https://github.com/user-attachments/assets/8acaa016-09ea-4cbd-9866-86504bde406a)<br>
 <br>
+<br>
+![Image](https://github.com/user-attachments/assets/d3e0bd17-a66b-4a3a-be0f-fa7464ce2b7f)<br>
+<br>
 
 ### 【 タスク確認画面 】
 
-生成したタスク全てを確認することができます。<br>
+生成した全てのタスクを確認することができます。<br>
 
 ![Image](https://github.com/user-attachments/assets/6c98dcb8-979a-494c-b71b-2d25bba1d315)<br>
 <br>
@@ -48,13 +53,19 @@ Google のアカウントでログインします。
 
 この画面では、チャットボットと会話をしながら目標の設定をします。<br>
 まず最初に達成したい目標を入力し、送信を押してください。<br>
-![Image](https://github.com/user-attachments/assets/23f00b08-170c-44e3-a555-301d83efa299)<br>
+![Image](https://github.com/user-attachments/assets/14ef4473-cfeb-42ea-b1c5-a8c1babae954)
+<br>
+<br>
 <br>
 チャットボットから質問された内容を入力し、送信を押してください。<br>
-![Image](https://github.com/user-attachments/assets/d2f55e78-3996-4e2f-b118-e9cc9832b46e)<br>
+![Image](https://github.com/user-attachments/assets/23f00b08-170c-44e3-a555-301d83efa299)
+<br>
+<br>
 <br>
 ヒアリング内容に間違いがなければ保存を押してください。<br>
-![Image](https://github.com/user-attachments/assets/fce43671-43b2-4e96-acda-e9be833300fe)<br>
+![Image](https://github.com/user-attachments/assets/d2f55e78-3996-4e2f-b118-e9cc9832b46e)
+<br>
+<br>
 <br>
 保存を押すと、Dify のワークフローが実行されタスクが生成されます。<br>
 
@@ -66,6 +77,7 @@ Google のアカウントでログインします。
 ユーザー情報の確認や、目標設定でヒアリングした内容が確認できます。<br>
 
 ![Image](https://github.com/user-attachments/assets/749d3e26-ca0d-4636-9bd3-84ea455d6c6a)<br>
+<br>
 <br>
 
 ## 使用技術
